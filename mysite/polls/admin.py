@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Choice, Question
+from django.core.exceptions import PermissionDenied
 
 # Register your models here.
 
@@ -33,7 +34,10 @@ class QuestionAdmin(admin.ModelAdmin):
     inlines = [ChoiceInline]
     
 
-
+# def users_list_view(request):
+#     if not request.user.has_perm('auth.view_user'):
+#         raise PermissionDenied()
+    
 admin.site.register(Question, QuestionAdmin)
 # Adding multiple choices
 

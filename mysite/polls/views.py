@@ -5,6 +5,7 @@ from .models import Choice, Question
 from django.views import generic
 from django.urls import reverse
 from django.utils import timezone
+from django.contrib.auth.forms import UserCreationForm
 # Create your views here.
 
 # def index(request):
@@ -76,5 +77,5 @@ def vote(request, question_id):
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
         return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
-    
 
+# views.py: Function to register user 
