@@ -1,0 +1,17 @@
+{% extends 'polls/index.html' %}
+
+{% block content %}
+<div>
+  <form action="{% url 'polls:register' %}" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <input class="btn-primary"  style="border-radius: 5px;" type="submit" value="Register" />
+  </form>
+
+  <p>Already signed up yet?</p>
+  <a href="{% url 'polls:index' %}"><strong>Login</strong></a>
+  <a class="btn btn-dark" href="{% url 'polls:index' %}"></a>
+</div>
+
+{% endblock content %}

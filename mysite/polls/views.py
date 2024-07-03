@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import Choice, Question
@@ -6,6 +6,7 @@ from django.views import generic
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login, logout, authenticate
 # Create your views here.
 
 # def index(request):
@@ -79,3 +80,17 @@ def vote(request, question_id):
         return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
 
 # views.py: Function to register user 
+def register(request):
+    if request.method =="POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect("polls:detail")
+        else:
+          for msg in form.error_messages:
+                print(form.error_class[msg])
+            
+    form = UserCreationForm
+    return render(request, "polls/register.html", 
+                  context={"form":form})
