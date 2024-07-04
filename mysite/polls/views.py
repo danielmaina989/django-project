@@ -60,6 +60,8 @@ class RegisterView(generic.CreateView):
     form_class = SignUpForm
     template_name = 'polls/register.html'
     success_url = reverse_lazy('polls:index')
+
+
 # # # ...
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
@@ -86,7 +88,7 @@ def vote(request, question_id):
 # # views.py: Function to register user 
 def register_view(request):
     if request.method =="POST":
-        form = SignUpForm
+        form = SignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
             return redirect("polls:index")
