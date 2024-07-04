@@ -30,7 +30,7 @@ class Choice(models.Model):
 
 
 # class Voter(models.Model):
-#     user = models.ForeignKey(User)
+#     user = models.ForeignKey( User)
 #     poll = models.ForeignKey(Question)
 
 def was_published_recently(self):
