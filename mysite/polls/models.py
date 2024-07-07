@@ -5,6 +5,8 @@ from django.contrib import admin
 import datetime
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import User
+
 
 # Create your models here.
 class Question(models.Model):
@@ -31,25 +33,6 @@ class Choice(models.Model):
 # class Voter(models.Model):
 #     user = models.ForeignKey( User)
 #     poll = models.ForeignKey(Question)
-
-class MemberForm(models.Model):
-    fields = ['username','first_name','last_name','email','password', 'confirm_password']
-    username = models.CharField(max_length= 100)
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    email = models.EmailField(max_length=128)
-    password = models.CharField(max_length=128)
-    confirm_password = models.CharField(max_length=128)
-
-    # def __init__(self, *args: Any, **kwargs: Any) -> None:
-    #     super().__init__(*args, **kwargs)
-    #     self.fields['username'].widget.attrs.update({'class': 'form-control'})
-    #     self.fields['first_name'].widget.attrs.update({'class': 'form-control'})
-    #     self.fields['last_name'].widget.attrs.update({'class': 'form-control'})
-    #     self.fields['email'].widget.attrs.update({'class': 'form-control'})
-    #     self.fields['paswword'].widget.attrs.update({'class': 'form-control'})
-    #     self.fields['confirm_password'].widget.attrs.update({'class': 'form-control'})
-        
 
 
 def was_published_recently(self):

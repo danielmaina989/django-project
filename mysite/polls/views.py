@@ -1,3 +1,4 @@
+from django.forms import BaseModelForm
 from django.shortcuts import get_object_or_404, render, redirect
 from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect
@@ -5,10 +6,12 @@ from .models import Choice, Question
 from django.views import generic
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
-from .forms import SignUpForm
+from .forms import MemberForm
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+
 # Create your views here.
 
 # def index(request):
@@ -57,9 +60,16 @@ class ResultsView(generic.DetailView):
     template_name = "polls/results.html"
 
 class RegisterView(generic.CreateView):
-    form_class = SignUpForm
+    form_class = MemberForm
     template_name = 'polls/register.html'
     success_url = reverse_lazy('polls:index')
+
+    def form_valid(self, form):
+        obj = form.save()
+        obj.first_name = form.changed_data_data['first_name']
+        obj.last_name = form.changed_data_data['last_name']
+        obj.email = form.changed_data_data['email']
+        return super().form_valid(form)
 
 
 # # # ...
@@ -86,28 +96,22 @@ def vote(request, question_id):
         return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
 
 # # views.py: Function to register user 
-def register_view(request):
-    if request.method =="POST":
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            return redirect("polls:index")
-        else:
-            print(form.errors)
-            
-    form = UserCreationForm
-    return render(request, "polls/register.html", 
-                  context={"form":form})
-
 def login_view(request):
-    if request.method == "POST":
-        form = AuthenticationForm(data=request.POST)
-        if form.is_valid():
-            # LOGIN HERE
-            login(request, form.get_user())
-            return redirect("polls:index")
+    username = request.POST.get('username')
+    password = request.POST.get("password")
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+        login(request, user)
+        # Redirect to a success page.
+        return redirect("polls:index")
+        ...
     else:
+        # Return an 'invalid login' error message.
         form = AuthenticationForm()
+
     return render(request, "polls/login.html", 
                   {"form":form})
 
+def logout_view(request):
+    logout(request)
+    return redirect('pages/details')
