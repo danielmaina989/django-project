@@ -99,16 +99,18 @@ def vote(request, question_id):
 def login_view(request):
     username = request.POST.get('username')
     password = request.POST.get("password")
-    user = authenticate(request, username=username, password=password)
-    if user is not None:
-        login(request, user)
-        # Redirect to a success page.
-        return redirect("polls:index")
-        ...
-    else:
-        # Return an 'invalid login' error message.
-        form = AuthenticationForm()
-
+    form = AuthenticationForm()
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            user = authenticate(request, username=username, password=password)
+        
+            if user is not None:
+                login(request, user)
+                # Redirect to a success page.
+                return redirect("polls:index")
+            ...
+    
     return render(request, "polls/login.html", 
                   {"form":form})
 

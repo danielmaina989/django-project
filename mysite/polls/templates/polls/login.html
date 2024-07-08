@@ -1,12 +1,46 @@
-{% extends 'polls/index.html' %}
+
+
+{% extends "base.html" %}
 
 {% block content %}
-<div>
-  <form action="{% url 'polls:login' %}" method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input class="btn-primary"  style="border-radius: 5px;" type="submit" value="Login" />
 
-  </form>
-</div>
-{% endblock content %}
+{% if form.errors %}
+<ul>
+  {% for e in form.non_field_errors %}
+  <li>{{e}}</li>
+  {% endfor %}
+  {% for e in form.field_errors %}
+  <li>{{e}}</li>
+  {% endfor %}
+</ul>
+ </p>
+{% endif %}
+
+{% if next %}
+    {% if user.is_authenticated %}
+    <p>Your account doesn't have access to this page. To proceed,
+    please login with an account that has access.</p>
+    {% else %}
+    <p>Please login to see this page.</p>
+    {% endif %}
+{% endif %}
+
+<form method="post" action="{% url 'polls:login' %}">
+{% csrf_token %}
+<table>
+<tr>
+    <td>{{ form.username.label_tag }}</td>
+    <td>{{ form.username }}</td>
+</tr>
+<tr>
+    <td>{{ form.password.label_tag }}</td>
+    <td>{{ form.password }}</td>
+</tr>
+</table>
+
+<input type="submit" value="login">
+<input type="hidden" name="next" value="{{ next }}">
+</form>
+{# Assumes you set up the password_reset view in your URLconf #}
+<p><a href="{% url 'polls:password_reset' %}">Forgot password?</a></p>
+{% endblock %}

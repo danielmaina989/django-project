@@ -10,5 +10,6 @@ urlpatterns = [
     path("<int:question_id>/vote/", views.vote, name="vote"),
     path('register', views.RegisterView.as_view(), name ='register'),
     path('login', views.login_view, name ='login'),
+    path('password_rest', views.login_view, name ='password_reset'),
 
 ]
