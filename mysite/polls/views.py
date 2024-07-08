@@ -11,9 +11,10 @@ from django.contrib.auth.forms import AuthenticationForm
 from .forms import MemberForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
-
 # def index(request):
 #     latest_question_list = Question.objects.order_by("-pub_date")[:5]
 #     context = {"latest_question_list": latest_question_list}
@@ -34,10 +35,12 @@ def results(request, question_id):
     return render(request, "polls/results.html", {"question": question})  
 
 # using generic views
-class IndexView(generic.ListView):
+class IndexView(LoginRequiredMixin, generic.ListView):
+    login_url = "polls:login"
+    redirect_field_name = "redirect_to"
+
     template_name = "polls/index.html"
     context_object_name = "latest_question_list"
-
     def get_queryset(self):
         """
         Return the last five published questions (not including those set to be
@@ -46,7 +49,7 @@ class IndexView(generic.ListView):
         return Question.objects.filter(pub_date__lte=timezone.now()).order_by("-pub_date")[:5
     ]
 
-class DetailView(generic.DetailView):
+class DetailView(LoginRequiredMixin,generic.DetailView):
     model = Question
     template_name = "polls/detail.html"
     def get_queryset(self):
@@ -54,8 +57,8 @@ class DetailView(generic.DetailView):
         Excludes any questions that aren't published yet.
         """
         return Question.objects.filter(pub_date__lte=timezone.now())
-
-class ResultsView(generic.DetailView):
+    
+class ResultsView(LoginRequiredMixin, generic.DetailView):
     model = Question
     template_name = "polls/results.html"
 
@@ -95,7 +98,7 @@ def vote(request, question_id):
         # user hits the Back button.
         return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
 
-# # views.py: Function to register user 
+# # views.py: Function to register user
 def login_view(request):
     username = request.POST.get('username')
     password = request.POST.get("password")
@@ -104,16 +107,15 @@ def login_view(request):
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
             user = authenticate(request, username=username, password=password)
-        
             if user is not None:
                 login(request, user)
                 # Redirect to a success page.
                 return redirect("polls:index")
             ...
-    
     return render(request, "polls/login.html", 
                   {"form":form})
 
 def logout_view(request):
     logout(request)
-    return redirect('pages/details')
+    return redirect('polls:login')
+
