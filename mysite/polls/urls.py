@@ -13,5 +13,4 @@ urlpatterns = [
     path('login', views.login_view, name ='login'),
     path('password_rest', views.login_view, name ='password_reset'),
     path('logout', views.logout_view, name ='logout'),
-
 ]

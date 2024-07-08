@@ -50,6 +50,8 @@ class IndexView(LoginRequiredMixin, generic.ListView):
     ]
 
 class DetailView(LoginRequiredMixin,generic.DetailView):
+    login_url = "polls:login"
+    redirect_field_name = "redirect_to"
     model = Question
     template_name = "polls/detail.html"
     def get_queryset(self):
@@ -59,6 +61,9 @@ class DetailView(LoginRequiredMixin,generic.DetailView):
         return Question.objects.filter(pub_date__lte=timezone.now())
     
 class ResultsView(LoginRequiredMixin, generic.DetailView):
+    login_url = "polls:login"
+    redirect_field_name = "redirect_to"
+    
     model = Question
     template_name = "polls/results.html"
 
