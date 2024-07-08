@@ -12,7 +12,8 @@ from django.contrib.auth.models import User
 class Question(models.Model):
     question_text = models.CharField(max_length=200)
     pub_date = models.DateTimeField("date published")
-    # posted_by
+    posted_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    timestamp = models.DateTimeField(default=timezone.now)
     @admin.display(
         boolean=True,
         ordering="pub_date",
@@ -28,7 +29,8 @@ class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=200)
     votes = models.IntegerField(default=0)
-    # voter = fk(user)
+    voter = models.ForeignKey(User, on_delete=models.SET_NULL, related_name="votes", null=True, blank=True)
+    timestamp = models.DateTimeField(default=timezone.now)
     def __str__(self):
         return self.choice_text
     
