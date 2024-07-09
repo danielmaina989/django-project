@@ -13,6 +13,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.signals import user_logged_in
+from django.contrib.auth.views import LogoutView
 
 # Create your views here.
 # def index(request):
@@ -124,3 +126,26 @@ def logout_view(request):
     logout(request)
     return redirect('polls:login')
 
+def logged_in_message(sender, user, request, **kwargs):
+    """
+    Add a welcome message when the user logs in
+    """
+    messages.info(request, "Welcome")
+user_logged_in.connect(logged_in_message)
+
+# class CustomLogoutView(LogoutView):
+#   def get_success_url(self):
+#     success_url = super(CustomLogoutView, self).get_success_url()
+#     messages.add_message(
+#       self.request, messages.SUCCESS,
+#       'You have successfully logged out!'
+#     )
+#     return success_url
+
+class UserLogoutView(LogoutView):
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            messages.info(request, "You have successfully logged out.")
+        return super().dispatch(request, *args, **kwargs)
+
+    
