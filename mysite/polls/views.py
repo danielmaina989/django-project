@@ -14,7 +14,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.signals import user_logged_in
-from django.contrib.auth.views import LogoutView
+from django.contrib.auth.views import LogoutView, LoginView
+from django.conf import settings
 
 # Create your views here.
 # def index(request):
@@ -54,6 +55,7 @@ class IndexView(LoginRequiredMixin, generic.ListView):
 class DetailView(LoginRequiredMixin,generic.DetailView):
     login_url = "polls:login"
     redirect_field_name = "redirect_to"
+
     model = Question
     template_name = "polls/detail.html"
     def get_queryset(self):
@@ -73,7 +75,6 @@ class RegisterView(generic.CreateView):
     form_class = MemberForm
     template_name = 'polls/register.html'
     success_url = reverse_lazy('polls:index')
-
     def form_valid(self, form):
         obj = form.save()
         obj.first_name = form.changed_data_data['first_name']
@@ -115,7 +116,8 @@ def login_view(request):
         if form.is_valid():
             user = authenticate(request, username=username, password=password)
             if user is not None:
-                login(request, user)
+                form = login(request, user)
+                messages.success(request, f'Welcome {username}')
                 # Redirect to a success page.
                 return redirect("polls:index")
             ...
@@ -124,28 +126,9 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
+    messages.success(request, f'You were Logged Out')
     return redirect('polls:login')
 
-def logged_in_message(sender, user, request, **kwargs):
-    """
-    Add a welcome message when the user logs in
-    """
-    messages.info(request, "Welcome")
-user_logged_in.connect(logged_in_message)
 
-# class CustomLogoutView(LogoutView):
-#   def get_success_url(self):
-#     success_url = super(CustomLogoutView, self).get_success_url()
-#     messages.add_message(
-#       self.request, messages.SUCCESS,
-#       'You have successfully logged out!'
-#     )
-#     return success_url
-
-class UserLogoutView(LogoutView):
-    def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            messages.info(request, "You have successfully logged out.")
-        return super().dispatch(request, *args, **kwargs)
 
     

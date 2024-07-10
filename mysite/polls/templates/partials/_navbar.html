@@ -1,14 +1,11 @@
 <nav class="navbar navbar-dark bg-primary mb-4">
     <div class="container">
         <a class="navbar-brand" href="/">Extramile Plus</a>
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
+
 {% if just_logged_out %}  You are successfully logged out {% endif %}
-        <a class="navbar-brand" href="{% url 'polls:login' %}">logout</a>
+<form action="{% url 'polls:logout' %}" method="post">
+    {% csrf_token %}
+    <button type="submit"class="btn-secondary" button style="background-color: brown; border-radius: 6px;">Log Out</button>
+  </form>
     </div>
 </nav>

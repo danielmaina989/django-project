@@ -14,6 +14,13 @@
 
 
 {% block content %}
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
 <h1 class="text-center mb-3">Poll Questions</h1>
 {% if latest_question_list %}
 {% for question in latest_question_list %}
@@ -28,5 +35,9 @@
 {% else %}
 <p>No polls available</p>
 {% endif %}
-<a href="{% url 'polls:login' %}"><button type="submit" class="btn-secondary" button style="background-color: brown; border-radius: 6px;">Logout</button></a>
+<!-- <a href="{% url 'polls:login' %}"><button type="submit" class="btn-secondary" button style="background-color: brown; border-radius: 6px;">Logout</button></a> -->
+<form action="{% url 'polls:logout' %}" method="post">
+    {% csrf_token %}
+    <button type="submit"class="btn-secondary" button style="background-color: brown; border-radius: 6px;">Log Out</button>
+  </form>
 {% endblock %}
