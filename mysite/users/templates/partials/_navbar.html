@@ -1,0 +1,11 @@
+<nav class="navbar navbar-dark bg-primary mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="/">Extramile Plus</a>
+
+{% if just_logged_out %}  You are successfully logged out {% endif %}
+<form action="{% url 'users:logout' %}" method="post">
+    {% csrf_token %}
+    <button type="submit"class="btn-secondary" button style="background-color: brown; border-radius: 6px;">Log Out</button>
+  </form>
+    </div>
+</nav>

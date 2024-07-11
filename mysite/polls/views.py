@@ -39,7 +39,7 @@ def results(request, question_id):
 
 # using generic views
 class IndexView(LoginRequiredMixin, generic.ListView):
-    login_url = "polls:login"
+    login_url = "users:login"
     redirect_field_name = "redirect_to"
 
     template_name = "polls/index.html"
@@ -53,7 +53,7 @@ class IndexView(LoginRequiredMixin, generic.ListView):
     ]
 
 class DetailView(LoginRequiredMixin,generic.DetailView):
-    login_url = "polls:login"
+    login_url = "users:login"
     redirect_field_name = "redirect_to"
 
     model = Question
@@ -65,7 +65,7 @@ class DetailView(LoginRequiredMixin,generic.DetailView):
         return Question.objects.filter(pub_date__lte=timezone.now())
     
 class ResultsView(LoginRequiredMixin, generic.DetailView):
-    login_url = "polls:login"
+    login_url = "users:login"
     redirect_field_name = "redirect_to"
     
     model = Question

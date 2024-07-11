@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "widget_tweaks",
+    "users.apps.UsersConfig",
     "polls.apps.PollsConfig",
     'django.contrib.admin',
     'django.contrib.auth',

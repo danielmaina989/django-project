@@ -1,4 +1,4 @@
-<!-- 
+
 
 {% extends "base.html" %}
 
@@ -25,7 +25,7 @@
     {% endif %}
 {% endif %}
 
-<form method="post" action="{% url 'polls:login' %}">
+<form method="post" action="{% url 'users:login' %}">
 {% csrf_token %}
 <table>
 <tr>
@@ -42,5 +42,5 @@
 <input type="hidden" name="next" value="{{ next }}">
 </form>
 {# Assumes you set up the password_reset view in your URLconf #}
-<p><a href="{% url 'polls:password_reset' %}">Forgot password?</a></p>
-{% endblock %} -->
+<p><a href="{% url 'users:password_reset' %}">Forgot password?</a></p>
+{% endblock %}
