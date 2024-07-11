@@ -35,8 +35,8 @@
 {% else %}
 <p>No polls available</p>
 {% endif %}
-<!-- <a href="{% url 'polls:login' %}"><button type="submit" class="btn-secondary" button style="background-color: brown; border-radius: 6px;">Logout</button></a> -->
-<form action="{% url 'polls:logout' %}" method="post">
+<!-- <a href="{% url 'users:login' %}"><button type="submit" class="btn-secondary" button style="background-color: brown; border-radius: 6px;">Logout</button></a> -->
+<form action="{% url 'users:logout' %}" method="post">
     {% csrf_token %}
     <button type="submit"class="btn-secondary" button style="background-color: brown; border-radius: 6px;">Log Out</button>
   </form>

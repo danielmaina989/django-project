@@ -106,29 +106,6 @@ def vote(request, question_id):
         # user hits the Back button.
         return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
 
-# # views.py: Function to register user
-def login_view(request):
-    username = request.POST.get('username')
-    password = request.POST.get("password")
-    form = AuthenticationForm()
-    if request.method == 'POST':
-        form = AuthenticationForm(data=request.POST)
-        if form.is_valid():
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                form = login(request, user)
-                messages.success(request, f'Welcome {username}')
-                # Redirect to a success page.
-                return redirect("polls:index")
-            ...
-    return render(request, "polls/login.html", 
-                  {"form":form})
-
-def logout_view(request):
-    logout(request)
-    messages.success(request, f'You were Logged Out')
-    return redirect('polls:login')
-
 
 
     

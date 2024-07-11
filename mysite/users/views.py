@@ -24,9 +24,9 @@ class RegisterView(generic.CreateView):
     success_url = reverse_lazy('polls:index')
     def form_valid(self, form):
         obj = form.save()
-        obj.first_name = form.changed_data_data['first_name']
-        obj.last_name = form.changed_data_data['last_name']
-        obj.email = form.changed_data_data['email']
+        obj.first_name = form.cleaned_data['first_name']
+        obj.last_name = form.cleaned_data['last_name']
+        obj.email = form.cleaned_data['email']
         return super().form_valid(form)
 # # # ...
 def vote(request, question_id):
