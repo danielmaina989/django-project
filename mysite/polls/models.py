@@ -6,6 +6,8 @@ import datetime
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
+from django.contrib import messages
+from django.shortcuts import get_object_or_404, render, redirect
 
 
 # Create your models here.
@@ -42,3 +44,13 @@ class Choice(models.Model):
 def was_published_recently(self):
     now = timezone.now()
     return now - datetime.timedelta(days=1) <= self.pub_date <= now
+
+class Vote(models.Model):
+    choice = models.ForeignKey(Choice,on_delete=models.CASCADE)
+    voter = models.ForeignKey(User,on_delete=models.CASCADE)
+    def __str__(self):
+        if self.voter.get_full_name():
+            return self.voter.get_full_name()
+        else:
+            return self.voter.username
+

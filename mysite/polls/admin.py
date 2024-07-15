@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Choice, Question
+from .models import Choice, Question, Vote
 from django.core.exceptions import PermissionDenied
 
 # Register your models here.
@@ -39,6 +39,6 @@ class QuestionAdmin(admin.ModelAdmin):
 #         raise PermissionDenied()
     
 admin.site.register(Question, QuestionAdmin)
-# Adding multiple choices
-
+admin.site.register(Choice)
+admin.site.register(Vote)
 

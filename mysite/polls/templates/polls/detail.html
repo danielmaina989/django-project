@@ -38,7 +38,11 @@
             <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label>
         </div>
         {% endfor %}
-        <input type="submit" value="Vote" class="btn btn-success btn-lg btn-block mt-4" />
+        {%if voted %}
+        You voted Already -  {{voted.choice}}
+        {%else%}
+       <input type="submit" value="Vote" class="btn btn-success btn-lg btn-block mt-4" />
+        {%endif%}
     </form>
     {% endblock %}
     
