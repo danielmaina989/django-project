@@ -1,27 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-{% if form.errors %}
-<ul>
-  {% for e in form.non_field_errors %}
-  <li>{{e}}</li>
-  {% endfor %}
-  {% for e in form.field_errors %}
-  <li>{{e}}</li>
-  {% endfor %}
-</ul>
- </p>
-{% endif %}
-
-{% if next %}
-    {% if user.is_authenticated %}
-    <p>Your account doesn't have access to this page. To proceed,
-    please login with an account that has access.</p>
-    {% else %}
-    <p>Please login to see this page.</p>
-    {% endif %}
-{% endif %}
     <div class="card border-info mb-3" style="width: 25rem;">
         <div class="card-body">
             <div class="card-header bg-transparent border-info mb-3">Login Here <span style='font-size:20px;'>&#128071;</span></div>

@@ -47,20 +47,22 @@ class ChangePasswordView(PasswordChangeView):
     form_class = PasswordChangeForm
     success_url = reverse_lazy('users:login')
     template_name = 'users/change_password.html'
-    # def change_password_view(request):
-    #         if request.method == 'POST':
-    #             form = PasswordChangeForm(request.user, request.POST)
-    #             if form.is_valid():
-    #                 user = form.save()
-    #                 messages.success(request,('Your password was successfully updated!'))
-    #                 return redirect('users:change_password')
-    #             else:
-    #                 messages.error(request,('Please correct the error below.'))
-    #         else:
-    #             form = PasswordChangeForm(request.user)
-    #         return render(request, 'users/change_password.html', {
-    #             'form': form
-    #         })
+
+# def change_password_view(request):
+#     if request.method == 'POST':
+#         form = PasswordChangeForm(request.user, request.POST)
+#         if form.is_valid():
+                    
+#             user = form.save()
+#             messages.success(request,('Your password was successfully updated!'))
+#             return redirect('users:change_password')
+#         else:
+#             messages.error(request,('Please correct the error below.'))
+#     else:
+#         form = PasswordChangeForm(request.user)
+#     return render(request, 'users/change_password.html', {
+#         'form': form
+#     })
 
 
 def vote(request, question_id):
