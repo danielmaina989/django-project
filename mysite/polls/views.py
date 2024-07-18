@@ -41,22 +41,22 @@ def results(request, question_id):
 class IndexView(LoginRequiredMixin, generic.ListView):
     login_url = "users:login"
     redirect_field_name = "redirect_to"
-
-    
     template_name = "polls/index.html"
     context_object_name = "latest_question_list"
-    def get_queryset(self):
-        """
-        Return the last five published questions (not including those set to be
-        published in the future).
-        """
-        return Question.objects.filter(pub_date__lte=timezone.now()).order_by("-pub_date")[:5
-    ]
+    queryset = Question.objects.filter(pub_date__lte=timezone.now()).order_by("-pub_date")[:5]
+    # model = Question
+    
+    # def get_queryset(self):
+    #     """
+    #     Return the last five published questions (not including those set to be
+    #     published in the future).
+    #     """
+    #     return Question.objects.filter(pub_date__lte=timezone.now()).order_by("-pub_date")[:5]
+    
 
 class DetailView(LoginRequiredMixin,generic.DetailView):
     login_url = "users:login"
     redirect_field_name = "redirect_to"
-
     model = Question
     template_name = "polls/detail.html"
     def get_context_data(self, **kwargs):

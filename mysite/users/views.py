@@ -8,7 +8,7 @@ from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
-from .forms import MemberForm, UserCreationForm
+from .forms import MemberForm, UserCreationForm 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -17,7 +17,9 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.signals import user_logged_in
 from django.contrib.auth.views import LogoutView, LoginView, PasswordResetView
 from django.conf import settings
-
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth import update_session_auth_hash
 
 # Create your views here.
 class RegisterView(generic.CreateView):
@@ -41,6 +43,26 @@ class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
                       "please make sure you've entered the address you registered with, and check your spam folder."
     success_url = reverse_lazy('users:login')
 
+class ChangePasswordView(PasswordChangeView):
+    form_class = PasswordChangeForm
+    success_url = reverse_lazy('users:login')
+    template_name = 'users/change_password.html'
+    # def change_password_view(request):
+    #         if request.method == 'POST':
+    #             form = PasswordChangeForm(request.user, request.POST)
+    #             if form.is_valid():
+    #                 user = form.save()
+    #                 messages.success(request,('Your password was successfully updated!'))
+    #                 return redirect('users:change_password')
+    #             else:
+    #                 messages.error(request,('Please correct the error below.'))
+    #         else:
+    #             form = PasswordChangeForm(request.user)
+    #         return render(request, 'users/change_password.html', {
+    #             'form': form
+    #         })
+
+
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     try:
@@ -63,11 +85,10 @@ def vote(request, question_id):
         # user hits the Back button.
         return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
 
-# # views.py: Function to register user
 def login_view(request):
     username = request.POST.get('username')
     password = request.POST.get("password")
-    form = AuthenticationForm()
+    form = AuthenticationForm(initial={'username': None})
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
@@ -80,6 +101,7 @@ def login_view(request):
             ...
     return render(request, "users/login.html", 
                   {"form":form})
+
 
 def logout_view(request):
     logout(request)
