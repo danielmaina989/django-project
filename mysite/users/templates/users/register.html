@@ -29,7 +29,7 @@
           <form method="post">
             {% csrf_token %}
             {{ form.as_p}}
-            <button type="submit">Submit</button>
+            <button type="submit">Register</button>
           </form>
           <div class="card-footer bg-transparent border-info mt-2">
           <a href="{% url 'users:login'%}" class="card-link">Already have an account <span style='font-size:20px;'>&#128073;</span></a>

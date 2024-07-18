@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
 {% block content %}
  
-<div class="card text-center">
-    <div class="card-body">
-        <h1>Welcome To Extramile Pollster!</h1>
-        <p>This is an Polling Web Application built with Django</p>
-        <a class="btn btn-dark" href="{% url 'users:register' %}">
-            View Available Polls</a>
+
+<div class="card border-success mb-3 text-center" style="max-width: 35rem;">
+    <div class="card-header">Welcome To Extramile Pollster!</div>
+    <div class="card-body text-success">
+      <h5 class="card-title">This is an Polling Web Application built with Django</h5>
     </div>
-</div>
+    <div class="card-footer border-warning mt-3">
+        <small class="text-muted">
+            <a class="btn btn-dark" href="{% url 'users:register' %}">
+                View Available Polls</a>
+            </small>
+      </div>
 {% endblock %}
