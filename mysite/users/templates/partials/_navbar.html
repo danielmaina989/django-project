@@ -1,17 +1,29 @@
-<nav class="navbar navbar-dark bg-dark mb-4">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand" href="{% url 'index' %}">Extramile Plus</a>
-    <form class="d-flex">
-      <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success" type="submit">Search</button>
-    </form>
-      {% if just_logged_out %} You are successfully logged out {% endif %}
-      <form action="{% url 'users:logout' %}" method="post" class="justify-content-end">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-outline-success me-2" button style="background-color: brown; border-radius: 6px;">Log
-          Out</button>
-      </form>
+    <a class="navbar-brand" href="{% url 'index'%}">ExtraMile Plus</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'index'%}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Registered Voters</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Votes Tally</a>
+        </li>
+      </ul>
+      <div class="">
+        {% if just_logged_out %} You are successfully logged out {% endif %}
+        <form action="{% url 'users:logout' %}" method="post" class="">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-outline-success me-2" button style="background-color: brown; border-radius: 6px;">Log
+            Out</button>
+        </form>
+      </div>
     </div>
-    </div>
-
+  </div>
 </nav>

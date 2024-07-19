@@ -17,19 +17,26 @@
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
+    <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+        {% endfor %}
 </ul>
 {% endif %}
 <h1 class="text-center mb-3">Poll Questions</h1>
 {% if latest_question_list %}
 {% for question in latest_question_list %}
-<div class="card-mb-3">
-	<div class="card-body">
-		<p class="lead">{{ question.question_text }}</p>
-		<a href="{% url 'polls:detail' question.id %}" class="btn btn-primary btn-sm">Vote Now</a>
-		<a href="{% url 'polls:results' question.id %}" class="btn btn-secondary btn-sm">Results</a>
-	</div>
+<div class="row row-cols-1 row-cols-md-3 g-4 text-center">
+    <div class="col">
+        <div class="card text-dark bg-info mb-3 mt-4">
+            <div class="card-header">{{ question.question_text }}</div>
+            <div class="card-body">
+                <a href="{% url 'polls:detail' question.id %}" class="btn btn-primary btn-sm">Vote Now</a>
+                <a href="{% url 'polls:results' question.id %}" class="btn btn-secondary btn-sm">Results</a>
+            </div>
+            <div class="card-footer">
+                <small class="text-muted">Last updated 3 mins ago</small>
+            </div>
+        </div>
+    </div>
 </div>
 {% endfor %}
 {% else %}
@@ -38,6 +45,36 @@
 <!-- <a href="{% url 'users:login' %}"><button type="submit" class="btn-secondary" button style="background-color: brown; border-radius: 6px;">Logout</button></a> -->
 <form action="{% url 'users:logout' %}" method="post">
     {% csrf_token %}
-    <button type="submit"class="btn-secondary" button style="background-color: brown; border-radius: 6px;">Log Out</button>
-  </form>
+    <button type="submit" class="btn-secondary" button style="background-color: brown; border-radius: 6px;">Log
+        Out</button>
+</form>
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    <div class="col">
+      <div class="card h-100">
+        <img src="..." class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card h-100">
+        <img src="..." class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">This is a short card.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card h-100">
+        <img src="..." class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}
