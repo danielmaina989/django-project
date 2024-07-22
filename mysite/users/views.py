@@ -2,8 +2,9 @@ from django.forms import BaseModelForm
 from django.shortcuts import get_object_or_404, render, redirect
 from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect
-from polls.models import Choice, Question
+from polls.models import Choice, Question, Vote
 from django.views import generic
+from django.views.generic import FormView ,CreateView
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.contrib.auth import login, logout
@@ -32,6 +33,7 @@ class RegisterView(generic.CreateView):
         obj.last_name = form.cleaned_data['last_name']
         obj.email = form.cleaned_data['email']
         return super().form_valid(form)
+
 # # # ...
 class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
     template_name = 'users/password_reset.html'
@@ -67,6 +69,11 @@ class ChangePasswordView(PasswordChangeView):
 
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
+    choices = question.choice_set.all()
+    # if not question.User(request.user):
+    #     messages.error(
+    #         request, "You already voted this poll!", extra_tags='alert alert-warning alert-dismissible fade show')
+    #     return redirect("polls:list")
     try:
         selected_choice = question.choice_set.get(pk=request.POST["choice"])
     except (KeyError, Choice.DoesNotExist):
@@ -80,29 +87,45 @@ def vote(request, question_id):
             },
         )
     else:
+        inputvalue = request.POST['choice']
+        selected_choice = choices.get(id=inputvalue)
         selected_choice.votes = F("votes") + 1
-        selected_choice.save()
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
-        return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
+        selected_choice.save()  
+        Vote.objects.get_or_create(voter=request.user,
+                                    choice=selected_choice)
 
-def login_view(request):
-    username = request.POST.get('username')
-    password = request.POST.get("password")
-    form = AuthenticationForm(initial={'username': None})
-    if request.method == 'POST':
-        form = AuthenticationForm(data=request.POST)
-        if form.is_valid():
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                form = login(request, user)
-                messages.success(request, f'Welcome {username}')
-                # Redirect to a success page.
-                return redirect("polls:index")
-            ...
-    return render(request, "users/login.html", 
-                  {"form":form})
+
+# def login_view(request):
+#     username = request.POST.get('username')
+#     password = request.POST.get("password")
+#     form = AuthenticationForm(initial={'username': None})
+#     if request.method == 'POST':
+#         form = AuthenticationForm(data=request.POST)
+#         if form.is_valid():
+#             user = authenticate(request, username=username, password=password)
+#             if user is not None:
+#                 form = login(request, user)
+#                 # Redirect to a success page.
+#                 return redirect("polls:index")
+#     return render(request, "users/login.html", 
+#                   {"form":form})
+
+class LoginView(FormView):
+    form_class = AuthenticationForm
+    template_name = 'users/login.html'
+    success_url = reverse_lazy('polls:index')
+
+    def form_valid(self, form):
+        username = form.cleaned_data['username']
+        password = form.cleaned_data['password']
+        user = authenticate(self.request, username=username, password= password)
+        if user is not None:
+            login(self.request,user)
+            messages.success(self.request, f'Welcome {username}')
+            # redirect to a success page
+            return redirect('polls:index')
+        return render(self.request, "users/login.html")
+
 
 
 def logout_view(request):

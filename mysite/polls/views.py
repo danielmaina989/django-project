@@ -39,17 +39,17 @@ def results(request, question_id):
     return render(request, "polls/results.html", {"question": question})  
 
 # using generic views
-class IndexView(LoginRequiredMixin,generic.ListView):
+class IndexView(generic.ListView):
     login_url = "users:login"
     redirect_field_name = "redirect_to"
     template_name = "polls/index.html"
     context_object_name = "latest_question_list"
     queryset = Question.objects.filter(pub_date__lte=timezone.now()).order_by("-pub_date")[:5]
 
-    # def dispatch(self, request, *args, **kwargs):
-    #     if not request.user.is_authenticated:
-    #         return redirect(f"{settings.LOGIN_URL}?next={request.path}")
-    #     return super().dispatch(request, *args, **kwargs)
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect(f"{settings.LOGIN_URL}?next={request.path}")
+        return super().dispatch(request, *args, **kwargs)
         
     # model = Question
     # def get_queryset(self):
