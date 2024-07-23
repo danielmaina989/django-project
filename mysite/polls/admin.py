@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Choice, Question, Vote
+from .models import Choice, Question, Vote, Poll
 from django.core.exceptions import PermissionDenied
 
 # Register your models here.
@@ -32,13 +32,16 @@ class QuestionAdmin(admin.ModelAdmin):
     list_filter = ["pub_date"]
     search_fields = ["question_text"]
     inlines = [ChoiceInline]
+
+class PollAdmin(admin.ModelAdmin):
+    list_display = ["question","pub_date","was_published_recently"]
+    search_fields = ["question"]
+    list_filter = ["pub_date"]
+   
     
 
-# def users_list_view(request):
-#     if not request.user.has_perm('auth.view_user'):
-#         raise PermissionDenied()
-    
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Choice)
 admin.site.register(Vote)
+admin.site.register(Poll, PollAdmin)
 

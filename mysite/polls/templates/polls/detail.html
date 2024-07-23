@@ -22,7 +22,7 @@
     {% block content %}
     <a class="btn btn-secondary btn-sm mb-3 mt-4" href="{% url 'polls:index' %}">Back To Polls</a>
     <div class="card border-info mb-3" style="max-width: 18rem;">
-        <div class="card-header">{{ question.question_text }}</div>
+        <div class="card-header">{{ question.question }}</div>
         {% if error_message %}
         <p class="alert alert-danger">
             <strong>{{ error_message }}</strong>

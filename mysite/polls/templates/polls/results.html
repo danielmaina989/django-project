@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
 <h1 class="mb-5 text-center">{{ question.question_text }}</h1>
-
 <ul class="list-group mb-5">
 	{% for choice in question.choice_set.all %}
 	<li class="list-group-item">

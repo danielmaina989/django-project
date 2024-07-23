@@ -13,6 +13,6 @@ urlpatterns = [
         views.PasswordResetView.as_view(), name='password_reset_confirm'),
     path('password-reset-complete/',views.PasswordResetView.as_view(),name='password_reset_complete'),
     path('logout', views.logout_view, name ='logout'),
-     path('change-password/', views.ChangePasswordView.as_view(), name='change_password'),
+    path('change-password/', views.ChangePasswordView.as_view(), name='change_password'),
     # path('logout', views.CustomLogoutView.as_view(), name='logout'),
 ]

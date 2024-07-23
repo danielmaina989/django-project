@@ -54,3 +54,19 @@ class Vote(models.Model):
         else:
             return self.voter.username
 
+class Poll(models.Model):
+    question = models.TextField()
+    option_one = models.CharField(max_length=30)
+    option_two = models.CharField(max_length=30)
+    option_three = models.CharField(max_length=30)
+    option_one_count = models.IntegerField(default=0)
+    option_two_count = models.IntegerField(default=0)
+    option_three_count = models.IntegerField(default=0)
+    posted_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    pub_date = models.DateTimeField("date published",default=timezone.now)
+
+    def __str__(self):
+        return self.question
+    def was_published_recently(self):
+        now = timezone.now()
+        return now - datetime.timedelta(days=1) <= self.pub_date <= now
