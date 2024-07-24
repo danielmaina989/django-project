@@ -150,7 +150,6 @@ def create(request):
 @login_required
 def home(request):
     polls = Poll.objects.all()
-
     context = {
         'polls' : polls
     }
@@ -159,7 +158,6 @@ def home(request):
 @login_required   
 def results(request, poll_id):
     poll = Poll.objects.get(pk=poll_id)
-
     context = {
         'poll' : poll
     }
