@@ -14,7 +14,7 @@
 <div class="row  row-cols-md-3 g-4 text-center">
     <div class="col">
         <div class="card text-dark bg-info mb-3 mt-4">
-            <div class="card-header">{{ question.question }}</div>
+            <div class="card-header">{{ question.question_text }}</div>
             <div class="card-body">
                 <a href="{% url 'polls:detail' question.id %}" class="btn btn-primary btn-sm">Vote Now</a>
                 <a href="{% url 'polls:results' question.id %}" class="btn btn-secondary btn-sm">Results</a>

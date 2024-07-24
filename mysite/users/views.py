@@ -2,14 +2,14 @@ from django.forms import BaseModelForm
 from django.shortcuts import get_object_or_404, render, redirect
 from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect
-from polls.models import Choice, Question, Vote
+from polls.models import Choice, Question, Vote, Poll
 from django.views import generic
 from django.views.generic import FormView ,CreateView
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
-from .forms import MemberForm, UserCreationForm 
+from users.forms import MemberForm,CreatePollForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -134,6 +134,54 @@ def logout_view(request):
     return redirect('users:login')
 
 
+@login_required
+def create(request):
+    if request.method == 'POST':
+        form = CreatePollForm(request.POST)
+        if form.is_valid():
+            messages.success(request, f'You Poll was added successfully')
+            form.save()
+    else:
+        form = CreatePollForm()
+    context = {'form' : form}
+    return render(request, 'users/create.html', context)
+
+def home(request):
+    polls = Poll.objects.all()
+
+    context = {
+        'polls' : polls
+    }
+    return render(request, 'users/home.html', context)
+def results(request, poll_id):
+    poll = Poll.objects.get(pk=poll_id)
+
+    context = {
+        'poll' : poll
+    }
+    return render(request, 'users/results.html', context)
+
+def vote(request, poll_id):
+    poll = Poll.objects.get(pk=poll_id)
+    if request.method == 'POST':
+        print(request.POST['poll'])
+    if request.method == 'POST':
+        selected_option = request.POST['poll']
+
+        if selected_option == 'option1':
+            poll.option_one_count += 1
+        elif selected_option == 'option2':
+            poll.option_two_count += 1
+        elif selected_option == 'option3':
+            poll.option_three_count += 1
+        else:
+            return HttpResponse(400, 'Invalid form option')
+    poll.save()
+
+    return redirect('users:results', poll.id)
+
+        
+    
 
 
     

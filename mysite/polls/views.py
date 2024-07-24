@@ -2,13 +2,13 @@ from django.forms import BaseModelForm
 from django.shortcuts import get_object_or_404, render, redirect
 from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import Choice, Question, Vote, Poll
+from .models import Choice, Question, Vote
 from django.views import generic
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
-from .forms import MemberForm, CreatePollForm
+from users.forms import MemberForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -44,8 +44,8 @@ class IndexView(generic.ListView):
     redirect_field_name = "redirect_to"
     template_name = "polls/index.html"
     context_object_name = "latest_question_list"
-    # queryset = Question.objects.filter(pub_date__lte=timezone.now()).order_by("-pub_date")[:5]
-    queryset = Poll.objects.filter(pub_date__lte=timezone.now()).order_by("-pub_date")[:5]
+    queryset = Question.objects.filter(pub_date__lte=timezone.now()).order_by("-pub_date")[:5]
+    # queryset = Poll.objects.filter(pub_date__lte=timezone.now()).order_by("-pub_date")[:5]
 
 
     def dispatch(self, request, *args, **kwargs):
@@ -77,6 +77,7 @@ class DetailView(LoginRequiredMixin,generic.DetailView):
         """
         return Question.objects.filter(pub_date__lte=timezone.now())
     
+
 class ResultsView(LoginRequiredMixin, generic.DetailView):
     login_url = "users:login"
     redirect_field_name = "redirect_to"
@@ -96,7 +97,7 @@ class RegisterView(generic.CreateView):
         return super().form_valid(form)
 
 
-# # # ...
+# # # # ...
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     choices = question.choice_set.all()
@@ -130,17 +131,3 @@ def vote(request, question_id):
         # user hits the Back button.
         return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
 
-@login_required
-def create(request):
-    if request.method == 'POST':
-        form = CreatePollForm(request.POST)
-        if form.is_valid():
-            messages.success(request, f'You Poll was added successfully')
-            form.save()
-    else:
-        form = CreatePollForm()
-    context = {'form' : form}
-    return render(request, 'polls/create.html', context)
-
-        
-    

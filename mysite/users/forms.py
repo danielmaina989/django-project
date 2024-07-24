@@ -1,6 +1,9 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
+from django.forms import ModelForm
+from polls.models import Poll
+
 
 class MemberForm(UserCreationForm):
     email = forms.EmailField()
@@ -14,3 +17,7 @@ class ChangePasswordForm(UserCreationForm):
     new_password = forms.CharField(widget=forms.PasswordInput())
     confirm_password = forms.CharField(widget=forms.PasswordInput())
 
+class CreatePollForm(ModelForm):
+    class Meta:
+        model = Poll
+        fields = ['question', 'option_one', 'option_two', 'option_three','posted_by']
