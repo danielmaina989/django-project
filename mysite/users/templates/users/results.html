@@ -8,22 +8,40 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">Poll Result</h3>
+                <a href="{% url 'users:home'%}"><button type="button" class="btn btn-success mb-4">Back to
+                        Polls</button></a>
             </div>
-
-            <div class="panel-body">
-                <h3>{{ poll.question }}</h3>
-            </div>
-            
-            <ul class="list-group">
-                <li class="list-group-item">{{ poll.option_one }} &mdash; <strong>{{ poll.option_one_count }}</strong></li>
-                <li class="list-group-item">{{ poll.option_two }} &mdash; <strong>{{ poll.option_two_count }}</strong></li>
-                <li class="list-group-item">{{ poll.option_three }} &mdash; <strong>{{ poll.option_three_count }}</strong></li>
-            </ul>
-            
-            <div class="panel-footer">
-                Total &mdash; <strong>{{ poll.total }}</strong>
+            <div class="card border-info mb-3" style="max-width: 30rem;">
+                <div class="card-header">{{ poll.question }}</div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card-body text-success">
+                            <p class="card-text">Poll options</p>
+                            <ul class="list-group">
+                                <li class="list-group-item">{{ poll.option_one }}</li>
+                                <li class="list-group-item">{{ poll.option_two }}</li>
+                                <li class="list-group-item">{{ poll.option_three }}</li>
+                            </ul>
+                        </div>
+                        <div class="card-footer bg-transparent border-success">
+                            Total
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card-body text-success">
+                            <ul class="list-group">
+                                <p class="card-text">Votes</p>
+                                <li class="list-group-item"><strong>{{poll.option_one_count }}</strong></li>
+                                <li class="list-group-item"><strong>{{poll.option_two_count }}</strong></li>
+                                <li class="list-group-item"><strong>{{poll.option_three_count }}</strong></li>
+                            </ul>
+                        </div>
+                        <div class="card-footer bg-transparent border-success">
+                            <strong>{{ poll.total }}</strong>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
-{% endblock %}
+    {% endblock %}

@@ -50,6 +50,7 @@ class ChangePasswordView(PasswordChangeView):
     success_url = reverse_lazy('users:login')
     template_name = 'users/change_password.html'
 
+
 # def change_password_view(request):
 #     if request.method == 'POST':
 #         form = PasswordChangeForm(request.user, request.POST)
@@ -146,6 +147,7 @@ def create(request):
     context = {'form' : form}
     return render(request, 'users/create.html', context)
 
+@login_required
 def home(request):
     polls = Poll.objects.all()
 
@@ -153,6 +155,8 @@ def home(request):
         'polls' : polls
     }
     return render(request, 'users/home.html', context)
+
+@login_required   
 def results(request, poll_id):
     poll = Poll.objects.get(pk=poll_id)
 
@@ -161,13 +165,13 @@ def results(request, poll_id):
     }
     return render(request, 'users/results.html', context)
 
+@login_required
 def vote(request, poll_id):
     poll = Poll.objects.get(pk=poll_id)
-    if request.method == 'POST':
-        print(request.POST['poll'])
+    # if request.method == 'POST':
+    #     print(request.POST['poll'])
     if request.method == 'POST':
         selected_option = request.POST['poll']
-
         if selected_option == 'option1':
             poll.option_one_count += 1
         elif selected_option == 'option2':
@@ -176,11 +180,12 @@ def vote(request, poll_id):
             poll.option_three_count += 1
         else:
             return HttpResponse(400, 'Invalid form option')
-    poll.save()
+        poll.save()
+    context = {
+        'poll' : poll
+    }
+    return render(request, 'users/vote.html', context)
 
-    return redirect('users:results', poll.id)
-
-        
     
 
 

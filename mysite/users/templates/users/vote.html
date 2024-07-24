@@ -1,39 +1,49 @@
-<div class="panel-body">
-    <div class="row">
-        <div class="col-lg-12">
-            <h2>{{ poll.question }}</h2>
-        </div>
-    </div>
+{% extends "base.html" %}
 
-    <div class="row">
-        <div class="col-lg-12">
-            <hr />
+{% block title %}Vote{% endblock %}
 
-            <form method="POST">
-                {% csrf_token %}
-                <div class="form-group">
-                    <div class="radio">
-                        <label>
-                            <input type="radio" name="poll" value="option1">
-                            {{ poll.option_one }}
-                        </label> &nbsp;
-                        <label>
-                            <input type="radio" name="poll" value="option2">
-                            {{ poll.option_two }}
-                        </label> &nbsp;
-                        <label>
-                            <input type="radio" name="poll" value="option3">
-                            {{ poll.option_three }}
-                        </label> &nbsp;
+{% block content %}
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    <h3 class="panel-title mt-5">Cast Your Vote</h3>
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title mb-3">{{ poll.question }}</h5>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <div class="radio">
+                            <div class="mt-1 mb-1">
+                                <label>
+                                    <input type="radio" name="poll" value="option1">
+                                    {{ poll.option_one }}
+                                </label> &nbsp;
+                            </div>
+                            <div class="mt-1 mb-2">
+                                <label>
+                                    <input type="radio" name="poll" value="option2">
+                                    {{ poll.option_two }}
+                                </label> &nbsp;
+                            </div>
+                            <div class="mt-1 mb-2">
+                                <label>
+                                    <input type="radio" name="poll" value="option3">
+                                    {{ poll.option_three }}
+                                </label> &nbsp;
+                            </div>
+                        </div>
                     </div>
-                </div>
-
-                <hr />
-
-                <button type="submit" class="btn btn-info">
-                    Submit
-                </button>
-            </form>
+                    <hr />
+                    <button type="submit" class="btn btn-info mx-2">
+                        Submit
+                    </button>
+                    <a href="{% url 'users:results' poll.id%}" class="btn btn-success my-2">View Results</a> &nbsp;
+                </form>
+            </div>
+            <div class="card-footer">
+                <small class="text-muted">Last updated 3 mins ago</small>
+            </div>
         </div>
     </div>
-</div>
+{% endblock %}
