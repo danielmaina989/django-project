@@ -8,7 +8,7 @@ from django.views.generic import FormView ,CreateView
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.contrib.auth import login, logout
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from users.forms import MemberForm,CreatePollForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -18,7 +18,6 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.signals import user_logged_in
 from django.contrib.auth.views import LogoutView, LoginView, PasswordResetView
 from django.conf import settings
-from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth import update_session_auth_hash
 
@@ -134,7 +133,6 @@ def logout_view(request):
     messages.success(request, f'You were Logged Out')
     return redirect('users:login')
 
-
 @login_required
 def create(request):
     if request.method == 'POST':
@@ -184,7 +182,8 @@ def vote(request, poll_id):
     }
     return render(request, 'users/vote.html', context)
 
-    
+def voters(request):
+    context = {
 
-
-    
+    }
+    return render(request, 'users/voters.html', context)

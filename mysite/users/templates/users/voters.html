@@ -1,0 +1,34 @@
+{% extends 'base.html'%}
+
+{% block content%}
+    <h1>Welcome</h1>
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">{{ poll.question }}</th>
+            <th scope="col">Votes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+        {% for poll in polls %}
+            <th scope="row">{{forloop.counter}}</th>
+            <td>{{ poll.question }}</td>
+            <td>{{ poll.total }}</td>
+            {% endfor%}
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <td>Jacob</td>
+            <td>Thornton</td>
+            <td>@fat</td>
+          </tr>
+          <tr>
+            <th scope="row">3</th>
+            <td colspan="2">Larry the Bird</td>
+            <td>@twitter</td>
+          </tr>
+        </tbody>
+      </table>
+{% endblock%}
