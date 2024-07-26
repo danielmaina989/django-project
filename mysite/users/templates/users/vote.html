@@ -10,7 +10,7 @@
         <div class="card h-100">
             <div class="card-body">
                 <h5 class="card-title mb-3">{{ poll.question }}</h5>
-                <form method="POST">
+                <form action="{% url 'users:voter' poll.id %}" method="post">
                     {% csrf_token %}
                     <div class="form-group">
                         <div class="radio">

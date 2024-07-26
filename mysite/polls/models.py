@@ -53,6 +53,7 @@ class Vote(models.Model):
             return self.voter.get_full_name()
         else:
             return self.voter.username
+        
 class Poll(models.Model):
     question = models.TextField()
     option_one = models.CharField(max_length=30)
@@ -71,3 +72,8 @@ class Poll(models.Model):
         return now - datetime.timedelta(days=1) <= self.pub_date <= now
     def total(self):
         return self.option_one_count + self.option_two_count + self.option_three_count
+    def __str__(self):
+        if self.user.get_full_name():
+            return self.user.get_full_name()
+        else:
+            return self.user.username

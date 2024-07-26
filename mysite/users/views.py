@@ -9,7 +9,7 @@ from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
-from users.forms import MemberForm,CreatePollForm
+from users.forms import MemberForm, CreatePollForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -92,7 +92,8 @@ def vote(request, question_id):
         selected_choice.votes = F("votes") + 1
         selected_choice.save()  
         Vote.objects.get_or_create(voter=request.user,
-                                    choice=selected_choice)
+                                  choice=selected_choice)
+
 
 
 # def login_view(request):
@@ -162,12 +163,13 @@ def results(request, poll_id):
     return render(request, 'users/results.html', context)
 
 @login_required
-def vote(request, poll_id):
+def voter(request, poll_id):
     poll = Poll.objects.get(pk=poll_id)
     # if request.method == 'POST':
     #     print(request.POST['poll'])
     if request.method == 'POST':
         selected_option = request.POST['poll']
+
         if selected_option == 'option1':
             poll.option_one_count += 1
         elif selected_option == 'option2':
@@ -176,6 +178,7 @@ def vote(request, poll_id):
             poll.option_three_count += 1
         else:
             return HttpResponse(400, 'Invalid form option')
+        
         poll.save()
     context = {
         'poll' : poll
