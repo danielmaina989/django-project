@@ -10,7 +10,7 @@
         <div class="card h-100">
             <div class="card-body">
                 <h5 class="card-title mb-3">{{ poll.question }}</h5>
-                <form action="{% url 'users:voter' poll.id %}" method="post">
+                <form action="{% url 'users:vote' poll.id %}" method="post">
                     {% csrf_token %}
                     <div class="form-group">
                         <div class="radio">
@@ -35,9 +35,13 @@
                         </div>
                     </div>
                     <hr />
+                    {% if voted %}
+                    You voted - {{voted.selected_option}}
+                    {%else%}
                     <button type="submit" class="btn btn-info mx-2">
                         Submit
                     </button>
+                    {%endif%}
                     <a href="{% url 'users:results' poll.id%}" class="btn btn-success my-2">View Results</a> &nbsp;
                 </form>
             </div>

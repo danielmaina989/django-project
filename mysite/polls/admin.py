@@ -34,8 +34,8 @@ class QuestionAdmin(admin.ModelAdmin):
     inlines = [ChoiceInline]
 
 class PollAdmin(admin.ModelAdmin):
-    list_display = ["question","pub_date","was_published_recently"]
-    search_fields = ["question"]
+    list_display = ["name","pub_date","was_published_recently"]
+    search_fields = ["name"]
     list_filter = ["pub_date"]
    
     

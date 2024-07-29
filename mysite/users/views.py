@@ -67,32 +67,32 @@ class ChangePasswordView(PasswordChangeView):
 #     })
 
 
-def vote(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    choices = question.choice_set.all()
-    # if not question.User(request.user):
-    #     messages.error(
-    #         request, "You already voted this poll!", extra_tags='alert alert-warning alert-dismissible fade show')
-    #     return redirect("polls:list")
-    try:
-        selected_choice = question.choice_set.get(pk=request.POST["choice"])
-    except (KeyError, Choice.DoesNotExist):
-        # Redisplay the question voting form.
-        return render(
-            request,
-            "polls/detail.html",
-            {
-                "question": question,
-                "error_message": "You didn't select a choice.",
-            },
-        )
-    else:
-        inputvalue = request.POST['choice']
-        selected_choice = choices.get(id=inputvalue)
-        selected_choice.votes = F("votes") + 1
-        selected_choice.save()  
-        Vote.objects.get_or_create(voter=request.user,
-                                  choice=selected_choice)
+# def vote(request, question_id):
+#     question = get_object_or_404(Question, pk=question_id)
+#     choices = question.choice_set.all()
+#     # if not question.User(request.user):
+#     #     messages.error(
+#     #         request, "You already voted this poll!", extra_tags='alert alert-warning alert-dismissible fade show')
+#     #     return redirect("polls:list")
+#     try:
+#         selected_choice = question.choice_set.get(pk=request.POST["choice"])
+#     except (KeyError, Choice.DoesNotExist):
+#         # Redisplay the question voting form.
+#         return render(
+#             request,
+#             "polls/detail.html",
+#             {
+#                 "question": question,
+#                 "error_message": "You didn't select a choice.",
+#             },
+#         )
+#     else:
+#         inputvalue = request.POST['choice']
+#         selected_choice = choices.get(id=inputvalue)
+#         selected_choice.votes = F("votes") + 1
+#         selected_choice.save()  
+#         Vote.objects.get_or_create(voter=request.user,
+#                                   choice=selected_choice)
 
 
 
@@ -114,7 +114,7 @@ def vote(request, question_id):
 class LoginView(FormView):
     form_class = AuthenticationForm
     template_name = 'users/login.html'
-    success_url = reverse_lazy('polls:index')
+    success_url = reverse_lazy('users:home')
 
     def form_valid(self, form):
         username = form.cleaned_data['username']
@@ -124,7 +124,7 @@ class LoginView(FormView):
             login(self.request,user)
             messages.success(self.request, f'Welcome {username}')
             # redirect to a success page
-            return redirect('polls:index')
+            return redirect('users:home')
         return render(self.request, "users/login.html")
 
 
@@ -163,7 +163,7 @@ def results(request, poll_id):
     return render(request, 'users/results.html', context)
 
 @login_required
-def voter(request, poll_id):
+def votes(request, poll_id):
     poll = Poll.objects.get(pk=poll_id)
     # if request.method == 'POST':
     #     print(request.POST['poll'])
@@ -180,10 +180,14 @@ def voter(request, poll_id):
             return HttpResponse(400, 'Invalid form option')
         
         poll.save()
+
     context = {
         'poll' : poll
     }
+    # context['voted'] = Vote.objects.filter(voter=request.user, )
+    
     return render(request, 'users/vote.html', context)
+
 
 def voters(request):
     context = {

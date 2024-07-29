@@ -20,4 +20,4 @@ class MemberForm(UserCreationForm):
 class CreatePollForm(ModelForm):
     class Meta:
         model = Poll
-        fields = ['question', 'option_one', 'option_two', 'option_three','posted_by']
+        fields = ['name','posted_by']
