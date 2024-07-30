@@ -14,7 +14,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 class Question(models.Model):
     question_text = models.CharField(max_length=200)
     poll = models.ForeignKey('Poll', on_delete=models.SET_NULL, null=True, blank=True)
-    pub_date = models.DateTimeField("date published")
+    pub_date = models.DateTimeField("date published",default=timezone.now )
     posted_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     timestamp = models.DateTimeField(default=timezone.now)
     @admin.display(

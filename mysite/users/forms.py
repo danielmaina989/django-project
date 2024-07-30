@@ -2,7 +2,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
 from django.forms import ModelForm
-from polls.models import Poll
+from polls.models import Poll, Question, Choice
 
 
 class MemberForm(UserCreationForm):
@@ -21,3 +21,13 @@ class CreatePollForm(ModelForm):
     class Meta:
         model = Poll
         fields = ['name','posted_by']
+
+class CreatePollQuizForm(ModelForm):
+    class Meta:
+        model = Question
+        fields = ['question_text','pub_date']
+
+class CreatePollChoicesForm(ModelForm):
+    class Meta:
+        model = Choice
+        fields = ['choice_text']

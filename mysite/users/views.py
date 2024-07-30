@@ -9,7 +9,7 @@ from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
-from users.forms import MemberForm, CreatePollForm
+from users.forms import MemberForm, CreatePollForm, CreatePollQuizForm, CreatePollChoicesForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -103,15 +103,27 @@ class CreatePollView(FormView):
     template_name = 'users/create_poll_name.html'
     success_url = reverse_lazy('users:create_poll_quiz')
     def form_valid(self, form):
-    
+        form.save()
+        messages.success(self.request, f'Your Poll was added succcesfully')
+
         return super().form_valid(form)
 
 class CreateQuizView(FormView):
-    form_class = CreatePollForm
+    form_class = CreatePollQuizForm
     template_name = 'users/create_poll_quiz.html'
     success_url = reverse_lazy('users:create_poll_quiz')
     def form_valid(self, form):
+        form.save()
+        messages.success(self.request, f'Your Question was added succcesfully')
+        return super().form_valid(form)
     
+class CreateChoicesView(FormView):
+    form_class = CreatePollChoicesForm
+    template_name = 'users/create_poll_choice.html'
+    success_url = reverse_lazy('users:create_poll_choice')
+    def form_valid(self, form):
+        form.save()
+        messages.success(self.request, f'Your Question was added succcesfully')
         return super().form_valid(form)
 
 
