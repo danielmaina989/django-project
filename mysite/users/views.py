@@ -49,24 +49,6 @@ class ChangePasswordView(PasswordChangeView):
     success_url = reverse_lazy('users:login')
     template_name = 'users/change_password.html'
 
-
-# def change_password_view(request):
-#     if request.method == 'POST':
-#         form = PasswordChangeForm(request.user, request.POST)
-#         if form.is_valid():
-                    
-#             user = form.save()
-#             messages.success(request,('Your password was successfully updated!'))
-#             return redirect('users:change_password')
-#         else:
-#             messages.error(request,('Please correct the error below.'))
-#     else:
-#         form = PasswordChangeForm(request.user)
-#     return render(request, 'users/change_password.html', {
-#         'form': form
-#     })
-
-
 # def vote(request, question_id):
 #     question = get_object_or_404(Question, pk=question_id)
 #     choices = question.choice_set.all()
@@ -94,27 +76,10 @@ class ChangePasswordView(PasswordChangeView):
 #         Vote.objects.get_or_create(voter=request.user,
 #                                   choice=selected_choice)
 
-
-
-# def login_view(request):
-#     username = request.POST.get('username')
-#     password = request.POST.get("password")
-#     form = AuthenticationForm(initial={'username': None})
-#     if request.method == 'POST':
-#         form = AuthenticationForm(data=request.POST)
-#         if form.is_valid():
-#             user = authenticate(request, username=username, password=password)
-#             if user is not None:
-#                 form = login(request, user)
-#                 # Redirect to a success page.
-#                 return redirect("polls:index")
-#     return render(request, "users/login.html", 
-#                   {"form":form})
-
 class LoginView(FormView):
     form_class = AuthenticationForm
     template_name = 'users/login.html'
-    success_url = reverse_lazy('users:home')
+    success_url = reverse_lazy('users:create_poll_name')
 
     def form_valid(self, form):
         username = form.cleaned_data['username']
@@ -124,27 +89,55 @@ class LoginView(FormView):
             login(self.request,user)
             messages.success(self.request, f'Welcome {username}')
             # redirect to a success page
-            return redirect('users:home')
+            return redirect('users:create_poll_name')
         return render(self.request, "users/login.html")
-
-
 
 def logout_view(request):
     logout(request)
     messages.success(request, f'You were Logged Out')
     return redirect('users:login')
 
+
+class CreatePollView(FormView):
+    form_class = CreatePollForm
+    template_name = 'users/create_poll_name.html'
+    success_url = reverse_lazy('users:create_poll_quiz')
+    def form_valid(self, form):
+    
+        return super().form_valid(form)
+
+class CreateQuizView(FormView):
+    form_class = CreatePollForm
+    template_name = 'users/create_poll_quiz.html'
+    success_url = reverse_lazy('users:create_poll_quiz')
+    def form_valid(self, form):
+    
+        return super().form_valid(form)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @login_required
-def create(request):
-    if request.method == 'POST':
-        form = CreatePollForm(request.POST)
-        if form.is_valid():
-            messages.success(request, f'You Poll was added successfully')
-            form.save()
-    else:
-        form = CreatePollForm()
+def available_polls(request):
+    form = CreatePollForm()
     context = {'form' : form}
-    return render(request, 'users/create.html', context)
+    context["polls"] = Poll.objects.all()
+    return render(request, 'users/available_polls.html', context)
+    # return redirect('users:available_polls')
+
 
 @login_required
 def home(request):

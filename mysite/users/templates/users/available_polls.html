@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content%}
+
+<h1 class="text-center mb-3">Active Polls</h1>
+{% for poll in polls%}
+<a href="{% url 'polls:index' %}" class="btn btn-primary btn-sm">{{poll.name}}</a>
+{% endfor %}
+
+{%endblock%}

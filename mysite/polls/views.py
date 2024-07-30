@@ -2,7 +2,7 @@ from django.forms import BaseModelForm
 from django.shortcuts import get_object_or_404, render, redirect
 from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import Choice, Question, Vote
+from .models import Choice, Question, Vote, Poll
 from django.views import generic
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
@@ -52,6 +52,14 @@ class IndexView(generic.ListView):
         if not request.user.is_authenticated:
             return redirect(f"{settings.LOGIN_URL}?next={request.path}")
         return super().dispatch(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the polls
+        context["polls"] =Poll.objects.all()
+        context['pub_date'] = Poll.objects.filter(pub_date__lte=timezone.now())
+        return context    
         
     # model = Question
     # def get_queryset(self):
@@ -77,7 +85,6 @@ class DetailView(LoginRequiredMixin,generic.DetailView):
         """
         return Question.objects.filter(pub_date__lte=timezone.now())
     
-
 class ResultsView(LoginRequiredMixin, generic.DetailView):
     login_url = "users:login"
     redirect_field_name = "redirect_to"
