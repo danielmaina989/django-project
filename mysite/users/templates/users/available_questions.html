@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content%}
+
+<h1 class="text-center mb-3">Active Polls</h1>
+{% for question in questions%}
+<a href="{% url 'users:create_poll_choice' %}" class="btn btn-primary">{{question.question_text}}</a>
+{% endfor %}
+
+{%endblock%}

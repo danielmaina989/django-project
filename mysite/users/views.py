@@ -111,7 +111,7 @@ class CreatePollView(FormView):
 class CreateQuizView(FormView):
     form_class = CreatePollQuizForm
     template_name = 'users/create_poll_quiz.html'
-    success_url = reverse_lazy('users:create_poll_quiz')
+    success_url = reverse_lazy('users:create_poll_choice')
     def form_valid(self, form):
         # obj = form.save(commit=False)
         # obj.pub_date = timezone.now()
@@ -123,7 +123,7 @@ class CreateQuizView(FormView):
 class CreateChoicesView(FormView):
     form_class = CreatePollChoicesForm
     template_name = 'users/create_poll_choice.html'
-    success_url = reverse_lazy('users:create_poll_choice')
+    success_url = reverse_lazy('polls:index')
     def form_valid(self, form):
         obj = form.save(commit=False)
         obj.save
@@ -136,6 +136,14 @@ def available_polls(request):
     context = {'form' : form}
     context["polls"] = Poll.objects.all()
     return render(request, 'users/available_polls.html', context)
+    # return redirect('users:create_poll_quiz')
+
+@login_required   
+def available_questions(request):
+    form = CreatePollForm()
+    context = {'form' : form}
+    context["questions"] = Question.objects.all()
+    return render(request, 'users/available_questions.html', context)
     # return redirect('users:create_poll_quiz')
 
 

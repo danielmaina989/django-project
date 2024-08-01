@@ -19,6 +19,8 @@ urlpatterns = [
     path('create_poll_quiz/', views.CreateQuizView.as_view(), name ='create_poll_quiz'),
     path('create_poll_choice/', views.CreateChoicesView.as_view(), name ='create_poll_choice'),
     path('available_polls/', views.available_polls, name ='available_polls'),
+    path('available_questions/', views.available_questions, name ='available_questions'),
+
     # path('vote/<question_id>/', views.vote, name ='vote'),
     path('votes/<poll_id>/', views.votes, name ='vote'),
     path('voters', views.voters, name ='voters'),
