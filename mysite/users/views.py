@@ -105,42 +105,30 @@ class CreatePollView(FormView):
     def form_valid(self, form):
         form.save()
         messages.success(self.request, f'Your Poll was added succcesfully')
-
         return super().form_valid(form)
+
 
 class CreateQuizView(FormView):
     form_class = CreatePollQuizForm
     template_name = 'users/create_poll_quiz.html'
     success_url = reverse_lazy('users:create_poll_quiz')
     def form_valid(self, form):
+        # obj = form.save(commit=False)
+        # obj.pub_date = timezone.now()
+        # obj.save
         form.save()
         messages.success(self.request, f'Your Question was added succcesfully')
         return super().form_valid(form)
-    
+       
 class CreateChoicesView(FormView):
     form_class = CreatePollChoicesForm
     template_name = 'users/create_poll_choice.html'
     success_url = reverse_lazy('users:create_poll_choice')
     def form_valid(self, form):
-        form.save()
-        messages.success(self.request, f'Your Question was added succcesfully')
+        obj = form.save(commit=False)
+        obj.save
+        messages.success(self.request, f'Your Choice was added succcesfully')
         return super().form_valid(form)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 @login_required
 def available_polls(request):
@@ -148,7 +136,7 @@ def available_polls(request):
     context = {'form' : form}
     context["polls"] = Poll.objects.all()
     return render(request, 'users/available_polls.html', context)
-    # return redirect('users:available_polls')
+    # return redirect('users:create_poll_quiz')
 
 
 @login_required

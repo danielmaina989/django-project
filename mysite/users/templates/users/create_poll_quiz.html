@@ -1,25 +1,27 @@
 {% extends "base.html" %}
 {% load widget_tweaks %}
 
-{% block title %}Create Poll{% endblock %}
+{% block title %}Create Question{% endblock %}
 {% block content %}
+{{form.errors}}
 <div class="row">
     <div class="col-lg-8 col-lg-offset-2">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Create A New Poll</h3>
+                <h3 class="panel-title">Create A Question</h3>
             </div>
-            <form method="POST">
+            <form action="{% url 'users:create_poll_choice' %}" method="POST">
               {% csrf_token %}
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-lg-12">
+                        <div class="col-lg-4">
                             <div class="form-group">
-                                <label for="question">Enter Poll Question</label>
-                                {% render_field form.question_text rows="3" class="form-control" %}
+                                <label for="name">Poll Title</label>
+                                {% render_field form.question_text class="form-control" %}
+                                
                             </div>
                         </div>
-                    </div>
+                        
                     <div class="row">
                         <hr />
                         <div class="col-lg-4">
@@ -32,4 +34,5 @@
         </div>
     </div>
 </div>
+<h1>{{obj.question_text}}</h1>
 {% endblock %}

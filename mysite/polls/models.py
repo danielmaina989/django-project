@@ -12,9 +12,9 @@ from django.shortcuts import get_object_or_404, render, redirect
 
 # Create your models here.
 class Question(models.Model):
-    question_text = models.CharField(max_length=200)
+    question_text = models.CharField(max_length=255, null=True, blank=True)
     poll = models.ForeignKey('Poll', on_delete=models.SET_NULL, null=True, blank=True)
-    pub_date = models.DateTimeField("date published",default=timezone.now )
+    pub_date = models.DateTimeField("date published",default=timezone.now)
     posted_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     timestamp = models.DateTimeField(default=timezone.now)
     @admin.display(
@@ -30,7 +30,7 @@ class Question(models.Model):
 
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    choice_text = models.CharField(max_length=200)
+    choice_text = models.CharField(max_length=255, null=True, blank=True)
     votes = models.IntegerField(default=0)
     voter = models.ForeignKey(User, on_delete=models.SET_NULL, related_name="votes", null=True, blank=True)
     timestamp = models.DateTimeField(default=timezone.now)

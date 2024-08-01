@@ -18,11 +18,13 @@ class MemberForm(UserCreationForm):
 #     confirm_password = forms.CharField(widget=forms.PasswordInput())
 
 class CreatePollForm(ModelForm):
+
     class Meta:
         model = Poll
         fields = ['name','posted_by']
 
 class CreatePollQuizForm(ModelForm):
+    pub_date = forms.DateTimeField(required=False)
     class Meta:
         model = Question
         fields = ['question_text','pub_date']
