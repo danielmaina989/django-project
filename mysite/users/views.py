@@ -111,11 +111,11 @@ class CreatePollView(FormView):
 class CreateQuizView(FormView):
     form_class = CreatePollQuizForm
     template_name = 'users/create_poll_quiz.html'
-    success_url = reverse_lazy('users:create_poll_choice')
+    success_url = reverse_lazy('users:create_poll_quiz')
     def form_valid(self, form):
         # obj = form.save(commit=False)
-        # obj.pub_date = timezone.now()
-        # obj.save
+        # obj.question_id = self.kwargs.get('question_id')
+        # obj.save()
         form.save()
         messages.success(self.request, f'Your Question was added succcesfully')
         return super().form_valid(form)
@@ -126,7 +126,9 @@ class CreateChoicesView(FormView):
     success_url = reverse_lazy('polls:index')
     def form_valid(self, form):
         obj = form.save(commit=False)
-        obj.save
+        obj.question_id = self.kwargs.get('question_id')
+        obj.save()
+
         messages.success(self.request, f'Your Choice was added succcesfully')
         return super().form_valid(form)
 

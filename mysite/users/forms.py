@@ -30,6 +30,7 @@ class CreatePollQuizForm(ModelForm):
         fields = ['question_text','pub_date']
 
 class CreatePollChoicesForm(ModelForm):
+    question = forms.CharField(required=False)
     class Meta:
         model = Choice
         fields = ['choice_text']

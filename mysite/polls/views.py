@@ -57,8 +57,11 @@ class IndexView(generic.ListView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         # Add in a QuerySet of all the polls
-        context["polls"] =Poll.objects.all()
-        context['pub_date'] = Poll.objects.filter(pub_date__lte=timezone.now())
+        context["polls"] = Poll.objects.all()
+        context['pub_date'] = Question.objects.filter(pub_date__lte=timezone.now())
+        # context['choice'] = Choice.objects.filter(question__pub_date__year=timezone.now().year)
+
+
         return context    
         
     # model = Question

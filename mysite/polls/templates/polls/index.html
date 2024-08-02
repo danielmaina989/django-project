@@ -13,6 +13,12 @@
         {% endfor %} -->
 
         <div class="card text-dark bg-info mb-3 mt-4">
+            {%if polls.name %}
+                Poll Title -  {{polls.name}}
+                {%else%}
+                Poll Title missing
+            {%endif%}
+
             <div class="card-header">{{ question.question_text }}</div>
 
             <div class="card-body">
@@ -20,7 +26,7 @@
                 <a href="{% url 'polls:results' question.id %}" class="btn btn-secondary btn-sm">Results</a>
             </div>
             <div class="card-footer">
-                <small class="text-muted">{{polls.pub_date}}</small>
+                <small class="text-muted">{{pub_date}}</small>
             </div>
         </div>
     </div>

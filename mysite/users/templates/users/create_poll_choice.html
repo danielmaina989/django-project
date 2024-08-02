@@ -10,25 +10,15 @@
             <div class="panel-heading">
                 <h3 class="panel-title">Create A New Poll</h3>
             </div>
-            <form method="POST">
+            <form action="" method="POST">
               {% csrf_token %}
                 <div class="panel-body">
                     <div class="row">
+                       
+                        
                         <div class="col-lg-12">
                             <div class="form-group">
-                                <label for="choice">Choice 1</label>
-                                {% render_field form.choice_text rows="3" class="form-control" %}
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <label for="choice">Choice 2</label>
-                                {% render_field form.choice_text rows="3" class="form-control" %}
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <label for="choice">Choice 3</label>
+                                <label for="choice_text">Choice</label>
                                 {% render_field form.choice_text rows="3" class="form-control" %}
                             </div>
                         </div>
@@ -38,7 +28,7 @@
                         <div class="col-lg-4">
                             <button type="submit" class="btn btn-info">Submit</button>
                             <a href="{% url 'users:available_polls'%}" class="btn btn-info ">Available Polls</a>
-                            <a href="{% url 'users:available_questions'%}" class="btn btn-info ">Available questions</a>
+                            <a href="{% url 'users:available_questions' %}" class="btn btn-info ">Available questions</a>
 
                         </div>
                     </div>
