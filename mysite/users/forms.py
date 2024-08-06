@@ -18,7 +18,6 @@ class MemberForm(UserCreationForm):
 #     confirm_password = forms.CharField(widget=forms.PasswordInput())
 
 class CreatePollForm(ModelForm):
-
     class Meta:
         model = Poll
         fields = ['name','posted_by']

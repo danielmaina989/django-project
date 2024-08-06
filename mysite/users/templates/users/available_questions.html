@@ -1,10 +1,14 @@
 {% extends 'base.html' %}
 
 {% block content%}
-
-<h1 class="text-center mb-3">Active Polls</h1>
-{% for question in questions%}
-<a href="{% url 'users:create_poll_choice' question.id %}" class="btn btn-primary">{{question.question_text}}</a>
-{% endfor %}
-
+<div class="card border-success mb-3" style="max-width: 35rem;">
+    <div class="card-header">Pick a question:  Add a choice</div>
+    <div class="card-body text-success">
+        {% for question in questions %}
+        <h5 class="card-title">
+            <a href="{% url 'users:create_poll_choice' question.id%}" class="btn btn-primary btn-sm">{{question.question_text}}</a>
+        </h5>
+        {% endfor %}
+    </div>
+  </div>
 {%endblock%}

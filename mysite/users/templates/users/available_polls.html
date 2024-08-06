@@ -1,10 +1,14 @@
 {% extends 'base.html' %}
 
 {% block content%}
-
-<h1 class="text-center mb-3">Active Polls</h1>
-{% for poll in polls%}
-<a href="{% url 'users:create_poll_quiz'%}" class="btn btn-primary btn-sm">{{poll.name}}</a>
-{% endfor %}
-
+<div class="card border-success mb-3" style="max-width: 35rem;">
+    <div class="card-header">Active Poll</div>
+    <div class="card-body text-success">
+        {% for poll in polls%}
+        <h5 class="card-title">
+            <a href="{% url 'users:create_poll_quiz'%}" class="btn btn-primary btn-sm">{{poll.name}}</a>
+        </h5>
+        {% endfor %}
+    </div>
+  </div>
 {%endblock%}

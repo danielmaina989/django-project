@@ -98,27 +98,37 @@ def logout_view(request):
     return redirect('users:login')
 
 
-class CreatePollView(FormView):
+class CreatePollView(CreateView):
     form_class = CreatePollForm
     template_name = 'users/create_poll_name.html'
-    success_url = reverse_lazy('users:create_poll_quiz')
+    
     def form_valid(self, form):
-        form.save()
+        obj = form.save()
         messages.success(self.request, f'Your Poll was added succcesfully')
+        # success_url = reverse_lazy('users:create_poll_quiz', kwargs={'poll_id': obj.id})
+        # return redirect (success_url)
         return super().form_valid(form)
-
-
-class CreateQuizView(FormView):
+    
+    def get_success_url(self, **kwargs):
+        success_url = reverse_lazy('users:create_poll_quiz',
+                                    kwargs={'poll_id': self.object.id})
+        return success_url
+    
+class CreateQuizView(CreateView):
     form_class = CreatePollQuizForm
     template_name = 'users/create_poll_quiz.html'
-    success_url = reverse_lazy('users:create_poll_quiz')
     def form_valid(self, form):
-        # obj = form.save(commit=False)
-        # obj.question_id = self.kwargs.get('question_id')
-        # obj.save()
-        form.save()
+        obj = form.save() 
         messages.success(self.request, f'Your Question was added succcesfully')
+        #success_url = reverse_lazy('users:create_poll_choice', kwargs={'question_id': obj.id})
+        # success_url = f'/create_poll_quiz/{obj.id}/'
+        # return redirect (success_url)
         return super().form_valid(form)
+    def get_success_url(self, **kwargs):
+        success_url = reverse_lazy('users:create_poll_choice',
+                                    kwargs={'question_id': self.object.id})
+        return success_url
+    
        
 class CreateChoicesView(FormView):
     form_class = CreatePollChoicesForm
@@ -128,7 +138,6 @@ class CreateChoicesView(FormView):
         obj = form.save(commit=False)
         obj.question_id = self.kwargs.get('question_id')
         obj.save()
-
         messages.success(self.request, f'Your Choice was added succcesfully')
         return super().form_valid(form)
 
@@ -194,6 +203,5 @@ def votes(request, poll_id):
 
 def voters(request):
     context = {
-
     }
     return render(request, 'users/voters.html', context)

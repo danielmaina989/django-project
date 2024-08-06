@@ -60,8 +60,6 @@ class IndexView(generic.ListView):
         context["polls"] = Poll.objects.all()
         context['pub_date'] = Question.objects.filter(pub_date__lte=timezone.now())
         # context['choice'] = Choice.objects.filter(question__pub_date__year=timezone.now().year)
-
-
         return context    
         
     # model = Question

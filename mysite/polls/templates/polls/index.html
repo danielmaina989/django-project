@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<h1 class="text-center mb-3">Active Polls</h1>
+<h1 class="text-center mb-3">Active Polls:</h1>
 
 {% if latest_question_list %}
 {% for question in latest_question_list %}
@@ -26,6 +26,7 @@
                 <a href="{% url 'polls:results' question.id %}" class="btn btn-secondary btn-sm">Results</a>
             </div>
             <div class="card-footer">
+                Last update 
                 <small class="text-muted">{{pub_date}}</small>
             </div>
         </div>

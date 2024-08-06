@@ -13,7 +13,6 @@
               {% csrf_token %}
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="name">Poll Title</label>
                                 {% render_field form.name class="form-control" %}
@@ -21,7 +20,7 @@
                         </div>
                         
                     <div class="row">
-                        <div class="col-md-3 mb-2 mt-2">
+                        <div class="col mb-2 mt-2">
                             <div class="form-group">
                                 <label for="option1">Posted By</label>
                                 {% render_field form.posted_by class="form-control" %}
@@ -31,11 +30,10 @@
                     </div>
                     <div class="row">
                         <hr />
-                        <div class="col-lg-4">
+                        <div class="col">
                             <button type="submit" class="btn btn-info">Submit</button>
                             <a href="{% url 'users:available_polls'%}" class="btn btn-info ">Available Polls</a>
                             <a href="{% url 'users:available_questions'%}" class="btn btn-info ">Available Questions</a>
-
                         </div>
                     </div>
                 </div>
