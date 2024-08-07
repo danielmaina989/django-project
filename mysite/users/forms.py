@@ -18,6 +18,7 @@ class MemberForm(UserCreationForm):
 #     confirm_password = forms.CharField(widget=forms.PasswordInput())
 
 class CreatePollForm(ModelForm):
+    name = forms.CharField(required=True)
     class Meta:
         model = Poll
         fields = ['name','posted_by']
@@ -30,6 +31,7 @@ class CreatePollQuizForm(ModelForm):
 
 class CreatePollChoicesForm(ModelForm):
     question = forms.CharField(required=False)
+    poll = forms.CharField(required=False)
     class Meta:
         model = Choice
         fields = ['choice_text']

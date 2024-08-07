@@ -98,7 +98,7 @@ def logout_view(request):
     return redirect('users:login')
 
 
-class CreatePollView(CreateView):
+class CreatePollView(LoginRequiredMixin,CreateView):
     form_class = CreatePollForm
     template_name = 'users/create_poll_name.html'
     
@@ -114,7 +114,7 @@ class CreatePollView(CreateView):
                                     kwargs={'poll_id': self.object.id})
         return success_url
     
-class CreateQuizView(CreateView):
+class CreateQuizView(LoginRequiredMixin,CreateView):
     form_class = CreatePollQuizForm
     template_name = 'users/create_poll_quiz.html'
     def form_valid(self, form):
@@ -130,7 +130,7 @@ class CreateQuizView(CreateView):
         return success_url
     
        
-class CreateChoicesView(FormView):
+class CreateChoicesView(LoginRequiredMixin,CreateView):
     form_class = CreatePollChoicesForm
     template_name = 'users/create_poll_choice.html'
     success_url = reverse_lazy('polls:index')

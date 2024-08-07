@@ -16,8 +16,8 @@
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="form-group">
-                                <label for="name">Poll Title</label>
-                                {% render_field form.question_text class="form-control" %}
+                                <label for="name">Question:</label>
+                                {% render_field form.question_text class="form-control"  required=True%}
                                 
                             </div>
                         </div>

@@ -6,7 +6,7 @@
     <div class="card-body text-success">
         {% for poll in polls%}
         <h5 class="card-title">
-            <a href="{% url 'users:create_poll_quiz'%}" class="btn btn-primary btn-sm">{{poll.name}}</a>
+            <a href="{% url 'users:create_poll_quiz' poll.id%}" class="btn btn-primary btn-sm">{{poll.name}}</a>
         </h5>
         {% endfor %}
     </div>

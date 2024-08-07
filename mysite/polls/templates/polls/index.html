@@ -13,8 +13,8 @@
         {% endfor %} -->
 
         <div class="card text-dark bg-info mb-3 mt-4">
-            {%if polls.name %}
-                Poll Title -  {{polls.name}}
+            {%if question.poll.name %}
+                Poll Title -  {{question.poll.name}}
                 {%else%}
                 Poll Title missing
             {%endif%}
@@ -27,7 +27,7 @@
             </div>
             <div class="card-footer">
                 Last update 
-                <small class="text-muted">{{pub_date}}</small>
+                <small class="text-muted">{{question.pub_date}}</small>
             </div>
         </div>
     </div>

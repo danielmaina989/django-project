@@ -23,7 +23,8 @@ class Question(models.Model):
         description="Published recently?",
     )
     def __str__(self):
-        return self.question_text
+        return str(self.question_text)
+    
     def was_published_recently(self):
         now = timezone.now()
         return now - datetime.timedelta(days=1) <= self.pub_date <= now
@@ -61,7 +62,8 @@ class Poll(models.Model):
     pub_date = models.DateTimeField("date published",default=timezone.now)
 
     def __str__(self):
-        return self.name if self.name else 'Null'
+        return str(self.name) if self.name else 'Null'
+    
     def was_published_recently(self):
         now = timezone.now()
         return now - datetime.timedelta(days=1) <= self.pub_date <= now
