@@ -4,7 +4,7 @@ from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect
 from polls.models import Choice, Question, Vote, Poll
 from django.views import generic
-from django.views.generic import FormView ,CreateView
+from django.views.generic import FormView ,CreateView, ListView
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.contrib.auth import login, logout
@@ -157,51 +157,25 @@ def available_questions(request):
     return render(request, 'users/available_questions.html', context)
     # return redirect('users:create_poll_quiz')
 
+class VotersView(LoginRequiredMixin, ListView):
+    login_url = "users:login"
+    redirect_field_name = "redirect_to"
+    model = Poll
+    template_name = "users/voters.html"
 
-@login_required
-def home(request):
-    polls = Poll.objects.all()
-    context = {
-        'polls' : polls
-    }
-    return render(request, 'users/home.html', context)
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the Users
+        context["voters"] = Poll.objects.all()
+        return context
+    def get_queryset(self):
+        """
+        Excludes any questions that aren't published yet.
+        """
+        return Question.objects.filter(pub_date__lte=timezone.now())
 
-@login_required   
-def results(request, poll_id):
-    poll = Poll.objects.get(pk=poll_id)
-    context = {
-        'poll' : poll
-    }
-    return render(request, 'users/results.html', context)
-
-@login_required
-def votes(request, poll_id):
-    poll = Poll.objects.get(pk=poll_id)
-    # if request.method == 'POST':
-    #     print(request.POST['poll'])
-    if request.method == 'POST':
-        selected_option = request.POST['poll']
-
-        if selected_option == 'option1':
-            poll.option_one_count += 1
-        elif selected_option == 'option2':
-            poll.option_two_count += 1
-        elif selected_option == 'option3':
-            poll.option_three_count += 1
-        else:
-            return HttpResponse(400, 'Invalid form option')
-        
-        poll.save()
-
-    context = {
-        'poll' : poll
-    }
-    # context['voted'] = Vote.objects.filter(voter=request.user, )
-    
-    return render(request, 'users/vote.html', context)
-
-
-def voters(request):
-    context = {
-    }
-    return render(request, 'users/voters.html', context)
+# @login_required 
+# def voters(request):
+#     context = {}
+#     return render(request, 'users/voters.html', context)

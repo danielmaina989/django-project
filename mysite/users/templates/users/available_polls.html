@@ -1,14 +1,23 @@
 {% extends 'base.html' %}
 
 {% block content%}
-<div class="card border-success mb-3" style="max-width: 35rem;">
-    <div class="card-header">Active Poll</div>
-    <div class="card-body text-success">
-        {% for poll in polls%}
-        <h5 class="card-title">
-            <a href="{% url 'users:create_poll_quiz' poll.id%}" class="btn btn-primary btn-sm">{{poll.name}}</a>
-        </h5>
-        {% endfor %}
+<div class="card-header mb-3 mt-3">Pick a Poll: Add a question</div>
+<div class="row row-cols-1 row-cols-md-2 g-4">
+    {% for poll in polls %}
+    <div class="col">
+      <div class="card border-success">
+        <div class="card-body">
+            <div class="card-header text-success mb-2">Poll ID: {{poll.id}}</div>
+          <h5 class="card-title">
+            <a href="{% url 'users:create_poll_quiz' poll.id%}"
+            class="btn btn-primary btn-sm">{{poll.name}}</a>
+          </h5>
+        </div>
+        <div class="card-footer bg-transparent border-success">
+            <p class="card-text"><small class="text-muted">Last update: {{poll.pub_date}}</small></p>
+        </div>
+      </div>
     </div>
+    {% endfor %}
   </div>
 {%endblock%}
