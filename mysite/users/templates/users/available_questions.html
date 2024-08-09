@@ -2,14 +2,20 @@
 
 {% block content%}
 
-<div class="card-header mb-3 mt-3">Pick a question: Add a choice</div>
-<div class="row row-cols-1 row-cols-md-2 g-4">
+<div class="text-center">
+  <div class="card-header mb-3 mt-3">Pick a question: Add a choice</div>
+</div>
+
+<div class="row row-cols-1 row-cols-md-2 g-4 text-center">
     {% for question in questions %}
     <div class="col">
       <div class="card border-success">
         <div class="card-body">
-            <div class="card-header text-success mb-2">Question ID: {{question.id}}</div>
-          <h5 class="card-title">
+            <div class="card-header text-success ">Question ID: {{question.id}}
+              <a href="#" class="btn btn-warning mx-3">Edit Question</a>
+            </div>
+            
+          <h5 class="card-title mt-2">
             <a href="{% url 'users:create_poll_choice' question.id%}"
             class="btn btn-primary btn-sm">{{question.question_text}}</a>
           </h5>

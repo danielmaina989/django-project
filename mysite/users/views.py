@@ -19,7 +19,8 @@ from django.contrib.auth.signals import user_logged_in
 from django.contrib.auth.views import LogoutView, LoginView, PasswordResetView
 from django.conf import settings
 from django.contrib.auth.views import PasswordChangeView
-from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth import update_session_auth_hash, get_user_model
+
 
 # Create your views here.
 class RegisterView(generic.CreateView):
@@ -162,12 +163,13 @@ class VotersView(LoginRequiredMixin, ListView):
     redirect_field_name = "redirect_to"
     model = Poll
     template_name = "users/voters.html"
-
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         # Add in a QuerySet of all the Users
         context["voters"] = Poll.objects.all()
+        User = get_user_model()
+        context["users"] = User.objects.all()
         return context
     def get_queryset(self):
         """
