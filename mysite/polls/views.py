@@ -47,7 +47,6 @@ class IndexView(generic.ListView):
     queryset = Question.objects.filter(pub_date__lte=timezone.now()).order_by("-pub_date")[:5]
     # queryset = Poll.objects.filter(pub_date__lte=timezone.now()).order_by("-pub_date")[:5]
 
-
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect(f"{settings.LOGIN_URL}?next={request.path}")

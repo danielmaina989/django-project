@@ -17,8 +17,12 @@ urlpatterns = [
     path('create_poll_name/', views.CreatePollView.as_view(), name ='create_poll_name'),
     path('create_poll_quiz/<int:poll_id>/', views.CreateQuizView.as_view(), name ='create_poll_quiz'),
     path('create_poll_choice/<int:question_id>/', views.CreateChoicesView.as_view(), name ='create_poll_choice'),
-    path('available_polls/', views.available_polls, name ='available_polls'),
-    path('available_questions/', views.available_questions, name ='available_questions'),
+    path('available_polls/', views.AvailablePollsView.as_view(), name ='available_polls'),
+    # path('searched/', views.SearchViews.as_view(), name ='searched'),
+    path('available_questions/', views.AvailableQuestionsView.as_view(), name ='available_questions'),
     path('voters', views.VotersView.as_view(), name ='voters'),
-    # path('logout', views.CustomLogoutView.as_view(), name='logout'),
+    path('pollsearch/', views.PollsSearch.as_view(), name='pollsearch'),
+    path('quizsearch/', views.QuizSearch.as_view(), name='quizsearch'),
+    path('votersearch/', views.VoterSearch.as_view(), name='votersearch'),
+
 ]

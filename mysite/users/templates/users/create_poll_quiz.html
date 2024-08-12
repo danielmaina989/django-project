@@ -5,7 +5,7 @@
 {% block content %}
 {{form.errors}}
 <div class="row">
-    <div class="col-lg-8 col-lg-offset-2">
+    <div class="col-lg-12 col-lg-offset-2">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">Create A Question</h3>
@@ -14,17 +14,17 @@
               {% csrf_token %}
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-lg-4">
+                        <div class="col">
                             <div class="form-group">
-                                <label for="name">Question:</label>
+                                <label for="name" class="mb-2">Question:</label>
                                 {% render_field form.question_text class="form-control"  required=True%}
                                 
                             </div>
                         </div>
                         
-                    <div class="row">
+                    <div class="row mt-2">
                         <hr />
-                        <div class="col-lg-4">
+                        <div class="col">
                             <button type="submit" class="btn btn-info">Submit</button>
                             <a href="{% url 'users:available_polls'%}" class="btn btn-info ">Available Polls</a>
 

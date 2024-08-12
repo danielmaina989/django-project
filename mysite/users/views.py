@@ -18,6 +18,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.signals import user_logged_in
 from django.contrib.auth.views import LogoutView, LoginView, PasswordResetView
 from django.conf import settings
+from django.db.models import Q
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth import update_session_auth_hash, get_user_model
 
@@ -142,21 +143,39 @@ class CreateChoicesView(LoginRequiredMixin,CreateView):
         messages.success(self.request, f'Your Choice was added succcesfully')
         return super().form_valid(form)
 
-@login_required
-def available_polls(request):
-    form = CreatePollForm()
-    context = {'form' : form}
-    context["polls"] = Poll.objects.all()
-    return render(request, 'users/available_polls.html', context)
-    # return redirect('users:create_poll_quiz')
-
-@login_required   
-def available_questions(request):
-    form = CreatePollForm()
-    context = {'form' : form}
-    context["questions"] = Question.objects.all()
-    return render(request, 'users/available_questions.html', context)
-    # return redirect('users:create_poll_quiz')
+class AvailablePollsView(LoginRequiredMixin, ListView):
+    form_class = CreatePollForm
+    template_name = 'users/available_polls.html'
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        context["polls"] = Poll.objects.all()
+        return context
+    def get_queryset(self):  # new
+        search_query = self.request.GET.get("search_poll")
+        if search_query:
+            object_list = Poll.objects.filter(
+                name__icontains=search_query).order_by("-pub_date")
+        else:
+            object_list = Poll.objects.all()
+        return object_list
+    
+class AvailableQuestionsView(LoginRequiredMixin, ListView):
+    form_class = CreatePollForm
+    template_name = 'users/available_questions.html'
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        context["questions"] = Question.objects.all()
+        return context
+    def get_queryset(self):  # new
+        search_query = self.request.GET.get("search_quiz")
+        if search_query:
+            object_list = Question.objects.filter(
+                question_text__icontains=search_query).order_by('-pub_date')
+        else:
+            object_list = Question.objects.all()
+        return object_list
 
 class VotersView(LoginRequiredMixin, ListView):
     login_url = "users:login"
@@ -167,17 +186,58 @@ class VotersView(LoginRequiredMixin, ListView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         # Add in a QuerySet of all the Users
-        context["voters"] = Poll.objects.all()
-        User = get_user_model()
-        context["users"] = User.objects.all()
+        # context["voters"] = Poll.objects.all()
+        user = get_user_model()
+        context["users"] = user.objects.all()
         return context
     def get_queryset(self):
         """
         Excludes any questions that aren't published yet.
         """
         return Question.objects.filter(pub_date__lte=timezone.now())
+    
+class PollsSearch(LoginRequiredMixin, ListView):
+    model = Poll
+    template_name = 'users/available_polls.html'
+    context_object_name = 'polls'
 
-# @login_required 
-# def voters(request):
-#     context = {}
-#     return render(request, 'users/voters.html', context)
+    def get_queryset(self):  # new
+        search_query = self.request.GET.get("search_poll")
+        if search_query:
+            object_list = Poll.objects.filter(
+                name__icontains=search_query).order_by("-pub_date")
+        else:
+            object_list = Poll.objects.all()
+        return object_list
+
+class QuizSearch(LoginRequiredMixin, ListView):
+    model = Question
+    template_name = 'users/available_questions.html'
+    context_object_name = 'questions'
+
+    def get_queryset(self):  # new
+        search_query = self.request.GET.get("search_quiz")
+        if search_query:
+            object_list = Question.objects.filter(
+                question_text__icontains=search_query).order_by("-pub_date")
+        else:
+            object_list = Question.objects.all()
+        return object_list
+    
+class VoterSearch(LoginRequiredMixin, ListView):
+    model = Poll
+    template_name = 'users/voters.html'
+    context_object_name = 'users'
+    def get_queryset(self):
+        search_query = self.request.GET.get("search_voter") 
+        user = get_user_model()   
+        if search_query:
+            object_list = user.objects.filter(
+            Q(first_name__icontains=search_query) | Q(last_name__icontains=search_query) | Q(email__icontains=search_query))
+        else:
+            object_list = user.objects.all()
+        print(object_list)
+        return object_list
+
+    
+

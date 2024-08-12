@@ -4,7 +4,7 @@
 {% block title %}Create Poll{% endblock %}
 {% block content %}
 <div class="row">
-    <div class="col-lg-8 col-lg-offset-2">
+    <div class="col-lg-12 col-lg-offset-2">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">Create A New Poll</h3>
@@ -32,8 +32,8 @@
                         <hr />
                         <div class="col">
                             <button type="submit" class="btn btn-info">Submit</button>
-                            <a href="{% url 'users:available_polls'%}" class="btn btn-info ">Available Polls</a>
-                            <a href="{% url 'users:available_questions'%}" class="btn btn-info ">Available Questions</a>
+                            <a href="{% url 'users:available_polls'%}" class="btn btn-info mx-2 ">Available Polls</a>
+                            <a href="{% url 'users:available_questions'%}" class="btn btn-info mx-2">Available Questions</a>
                         </div>
                     </div>
                 </div>
