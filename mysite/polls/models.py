@@ -3,6 +3,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib import admin
 import datetime
+from django.db.models import Sum, F
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
@@ -36,8 +37,17 @@ class Choice(models.Model):
     voter = models.ForeignKey(User, on_delete=models.SET_NULL, related_name="votes", null=True, blank=True)
     timestamp = models.DateTimeField(default=timezone.now)
     def __str__(self):
-        return self.choice_text
-    
+        return str(self.choice_text)
+
+    @property
+    def percentage(self):
+        total = self.question.choice_set.aggregate(Sum('votes'))['votes__sum']
+        for choice in self.question.choice_set.all():
+            total = total + choice.votes
+            result = (self.votes/total)* 100 if total else 0
+        return result
+        
+
 # class Voter(models.Model):
 #     user = models.ForeignKey( User)
 #     poll = models.ForeignKey(Question)

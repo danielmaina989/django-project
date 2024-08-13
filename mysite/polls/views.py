@@ -17,6 +17,7 @@ from django.contrib.auth.signals import user_logged_in
 from django.contrib.auth.views import LogoutView, LoginView
 from django.conf import settings
 
+
 # Create your views here.
 # def index(request):
 #     latest_question_list = Question.objects.order_by("-pub_date")[:5]
@@ -128,10 +129,9 @@ def vote(request, question_id):
         inputvalue = request.POST['choice']
         selected_choice = choices.get(id=inputvalue)
         selected_choice.votes = F("votes") + 1
-        selected_choice.save()  
+        selected_choice.save()
         Vote.objects.get_or_create(voter=request.user,
                                     choice=selected_choice)
-
 
         # Always return an HttpResponseRedirect after successfully dealing
         # with POST data. This prevents data from being posted twice if a
