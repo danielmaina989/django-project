@@ -205,7 +205,7 @@ class PollsSearch(LoginRequiredMixin, ListView):
         search_query = self.request.GET.get("search_poll")
         if search_query:
             object_list = Poll.objects.filter(
-                name__icontains=search_query).order_by("-pub_date")
+                Q(name__icontains=search_query) | Q(id__icontains=search_query)) 
         else:
             object_list = Poll.objects.all()
         return object_list
@@ -219,7 +219,7 @@ class QuizSearch(LoginRequiredMixin, ListView):
         search_query = self.request.GET.get("search_quiz")
         if search_query:
             object_list = Question.objects.filter(
-                question_text__icontains=search_query).order_by("-pub_date")
+                Q(question_text__icontains=search_query) | Q(id__icontains=search_query))
         else:
             object_list = Question.objects.all()
         return object_list
