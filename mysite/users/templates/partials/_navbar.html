@@ -6,6 +6,7 @@
     </button>
     <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
       <ul class="navbar-nav">
+        {% if user.is_authenticated %}
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="{% url 'users:voters'%}">Registered Voters</a>
         </li>
@@ -15,15 +16,27 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'users:create_poll_name'%}">Create a Poll</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'users:edit_profile'%}">Edit profile</a>
+        </li>
+        <li class="nav-item">
+          <div class="">
+            <form action="{% url 'users:logout' %}" method="post" class="">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-outline-success me-2" button style="background-color: brown; border-radius: 6px;">Log
+                Out</button>
+            </form>
+          </div>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'users:register'%}">Register</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'users:login'%}">Login</a>
+        </li>
+        {% endif %}
       </ul>
-      <div class="">
-        {% if just_logged_out %} You are successfully logged out {% endif %}
-        <form action="{% url 'users:logout' %}" method="post" class="">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-outline-success me-2" button style="background-color: brown; border-radius: 6px;">Log
-            Out</button>
-        </form>
-      </div>
     </div>
   </div>
 </nav>

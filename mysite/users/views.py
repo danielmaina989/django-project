@@ -8,7 +8,7 @@ from django.views.generic import FormView ,CreateView, ListView
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.contrib.auth import login, logout
-from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, UserChangeForm
 from users.forms import MemberForm, CreatePollForm, CreatePollQuizForm, CreatePollChoicesForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -28,14 +28,14 @@ class RegisterView(generic.CreateView):
     form_class = MemberForm
     template_name = 'users/register.html'
     success_url = reverse_lazy('polls:index')
-    def form_valid(self, form):
-        obj = form.save()
-        obj.first_name = form.cleaned_data['first_name']
-        obj.last_name = form.cleaned_data['last_name']
-        obj.email = form.cleaned_data['email']
-        return super().form_valid(form)
 
-# # # ...
+    
+class ProfileEditView(generic.CreateView):
+    form_class = UserChangeForm
+    template_name = 'users/edit_profile.html'
+    success_url = reverse_lazy('users:login')
+    
+
 class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
     template_name = 'users/password_reset.html'
     email_template_name = 'users/password_reset_email.html'
