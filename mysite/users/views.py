@@ -1,4 +1,5 @@
 from django.forms import BaseModelForm
+from django.views.generic.edit import UpdateView
 from django.shortcuts import get_object_or_404, render, redirect
 from django.db.models import F, Count
 from django.http import HttpResponse, HttpResponseRedirect
@@ -30,10 +31,13 @@ class RegisterView(generic.CreateView):
     success_url = reverse_lazy('polls:index')
 
     
-class ProfileEditView(generic.CreateView):
+class ProfileEditView(UpdateView):
     form_class = UserChangeForm
     template_name = 'users/edit_profile.html'
     success_url = reverse_lazy('users:login')
+
+    def get_object(self):
+        return self.request.user
     
 
 class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
@@ -50,33 +54,6 @@ class ChangePasswordView(PasswordChangeView):
     form_class = PasswordChangeForm
     success_url = reverse_lazy('users:login')
     template_name = 'users/change_password.html'
-
-# def vote(request, question_id):
-#     question = get_object_or_404(Question, pk=question_id)
-#     choices = question.choice_set.all()
-#     # if not question.User(request.user):
-#     #     messages.error(
-#     #         request, "You already voted this poll!", extra_tags='alert alert-warning alert-dismissible fade show')
-#     #     return redirect("polls:list")
-#     try:
-#         selected_choice = question.choice_set.get(pk=request.POST["choice"])
-#     except (KeyError, Choice.DoesNotExist):
-#         # Redisplay the question voting form.
-#         return render(
-#             request,
-#             "polls/detail.html",
-#             {
-#                 "question": question,
-#                 "error_message": "You didn't select a choice.",
-#             },
-#         )
-#     else:
-#         inputvalue = request.POST['choice']
-#         selected_choice = choices.get(id=inputvalue)
-#         selected_choice.votes = F("votes") + 1
-#         selected_choice.save()  
-#         Vote.objects.get_or_create(voter=request.user,
-#                                   choice=selected_choice)
 
 class LoginView(FormView):
     form_class = AuthenticationForm
@@ -115,6 +92,17 @@ class CreatePollView(LoginRequiredMixin,CreateView):
         success_url = reverse_lazy('users:create_poll_quiz',
                                     kwargs={'poll_id': self.object.id})
         return success_url
+
+class EditPollView(UpdateView):
+    model = Poll
+    fields = ["name"]
+    template_name = "users/edit_poll_name.html" 
+    success_url = reverse_lazy('users:available_polls')
+
+    
+
+    
+
     
 class CreateQuizView(LoginRequiredMixin,CreateView):
     form_class = CreatePollQuizForm

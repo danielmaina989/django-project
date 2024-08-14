@@ -16,6 +16,7 @@ urlpatterns = [
     path('logout', views.logout_view, name ='logout'),
     path('change_password/', views.ChangePasswordView.as_view(), name='change_password'),
     path('create_poll_name/', views.CreatePollView.as_view(), name ='create_poll_name'),
+    path('edit_poll_name/<int:pk>/', views.EditPollView.as_view(), name ='edit_poll_name'),
     path('create_poll_quiz/<int:poll_id>/', views.CreateQuizView.as_view(), name ='create_poll_quiz'),
     path('create_poll_choice/<int:question_id>/', views.CreateChoicesView.as_view(), name ='create_poll_choice'),
     path('available_polls/', views.AvailablePollsView.as_view(), name ='available_polls'),

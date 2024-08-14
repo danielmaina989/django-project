@@ -46,7 +46,7 @@ class Choice(models.Model):
         for choice in self.question.choice_set.all():
             total = total + choice.votes
             result = (self.votes/total)* 100 if total else 0
-        return result
+        return round(result, 2)
 
 # class Voter(models.Model):
 #     user = models.ForeignKey( User)
