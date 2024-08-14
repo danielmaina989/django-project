@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content%}
-
-<div class="card-header mb-3 mt-3">Pick a Poll: Add a question</div>
+<div class="card-header mb-3 mt-3">Pick a Poll: Add a question
+  <div class="text-success">Total Polls: {{count}}</div>
+</div>
 <form action="{% url 'users:pollsearch' %}" class="d-flex mb-2" method="GET">
   <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search_poll">
   <button class="btn btn-outline-success" type="submit">Search</button>

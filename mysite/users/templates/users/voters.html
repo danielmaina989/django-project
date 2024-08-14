@@ -12,6 +12,9 @@
       <th scope="col">First Name</th>
       <th scope="col">Last Name</th>
       <th scope="col">Email</th>
+      {%if voted%}
+      <th scope="col">Votes Cast</th>
+      {%endif%}
       <th scope="col">Action</th>
     </tr>
   </thead>
@@ -22,11 +25,18 @@
       <td class="table-info">{{user.first_name}}</td>
       <td class="table-info">{{user.last_name}}</td>
       <td class="table-info">{{user.email}}</td>
+
+      {% if vote in votes%}
+      <td class="table-info">{{votes}}</td>
+      {%endif%}
+      
+
       <td class="table-info">
         <a href="http://">Edit</a>
         <a href="http://">Delete</a>
       </td>
     </tr>
+    
     {%endfor%}
   </tbody>
 </table>

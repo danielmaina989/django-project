@@ -1,6 +1,6 @@
 from django.forms import BaseModelForm
 from django.shortcuts import get_object_or_404, render, redirect
-from django.db.models import F
+from django.db.models import F, Count
 from django.http import HttpResponse, HttpResponseRedirect
 from polls.models import Choice, Question, Vote, Poll
 from django.views import generic
@@ -150,6 +150,7 @@ class AvailablePollsView(LoginRequiredMixin, ListView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         context["polls"] = Poll.objects.all()
+        context["count"] = Poll.objects.count()
         return context
     def get_queryset(self):  # new
         search_query = self.request.GET.get("search_poll")
@@ -189,13 +190,14 @@ class VotersView(LoginRequiredMixin, ListView):
         # context["voters"] = Poll.objects.all()
         user = get_user_model()
         context["users"] = user.objects.all()
+        context["votes"] = Vote.objects.annotate(Count('voter'))
         return context
     def get_queryset(self):
         """
         Excludes any questions that aren't published yet.
         """
         return Question.objects.filter(pub_date__lte=timezone.now())
-    
+
 class PollsSearch(LoginRequiredMixin, ListView):
     model = Poll
     template_name = 'users/available_polls.html'
