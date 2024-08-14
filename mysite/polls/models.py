@@ -41,7 +41,8 @@ class Choice(models.Model):
 
     @property
     def percentage(self):
-        total = self.question.choice_set.aggregate(Sum('votes'))['votes__sum']
+        # total = self.question.choice_set.aggregate(Sum('votes'))['votes__sum']
+        total = 0.0
         for choice in self.question.choice_set.all():
             total = total + choice.votes
             result = (self.votes/total)* 100 if total else 0
