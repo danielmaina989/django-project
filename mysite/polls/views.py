@@ -41,11 +41,12 @@ def results(request, question_id):
 
 # using generic views
 class IndexView(generic.ListView):
+    paginate_by = 3
     login_url = "users:login"
     redirect_field_name = "redirect_to"
     template_name = "polls/index.html"
     context_object_name = "latest_question_list"
-    queryset = Question.objects.filter(pub_date__lte=timezone.now()).order_by("-pub_date")[:5]
+    queryset = Question.objects.filter(pub_date__lte=timezone.now()).order_by("-pub_date")
     # queryset = Poll.objects.filter(pub_date__lte=timezone.now()).order_by("-pub_date")[:5]
 
     def dispatch(self, request, *args, **kwargs):

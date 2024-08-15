@@ -5,6 +5,7 @@ from django.db.models import F, Count
 from django.http import HttpResponse, HttpResponseRedirect
 from polls.models import Choice, Question, Vote, Poll
 from django.views import generic
+from django.core.paginator import Paginator
 from django.views.generic import FormView ,CreateView, ListView
 from django.views.generic.edit import DeleteView
 from django.urls import reverse, reverse_lazy
@@ -100,12 +101,16 @@ class EditPollView(UpdateView):
     template_name = "users/edit_poll_name.html" 
     success_url = reverse_lazy('users:available_polls')
 
+
+
 class PollDeleteView(DeleteView):
     model =Poll
     template_name = "users/delete_poll_name.html" 
     success_url = reverse_lazy("users:available_polls")
 
-   
+
+
+  
 class CreateQuizView(LoginRequiredMixin,CreateView):
     form_class = CreatePollQuizForm
     template_name = 'users/create_poll_quiz.html'
@@ -122,10 +127,11 @@ class CreateQuizView(LoginRequiredMixin,CreateView):
         return success_url
     
 class EditQuizView(UpdateView):
-    model = Question
     fields = ["question_text"]
     template_name = "users/edit_questions.html" 
     success_url = reverse_lazy('users:available_questions')
+    queryset = Question.objects.filter(pub_date__lte=timezone.now()).order_by("-pub_date")
+
 
 class QuizDeleteView(DeleteView):
     model = Question
@@ -146,14 +152,16 @@ class CreateChoicesView(LoginRequiredMixin,CreateView):
 
 class AvailablePollsView(LoginRequiredMixin, ListView):
     form_class = CreatePollForm
+    paginate_by= 4
     template_name = 'users/available_polls.html'
+
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         context["polls"] = Poll.objects.all()
         context["count"] = Poll.objects.count()
         return context
-    def get_queryset(self):  # new
+    def get_queryset(self):
         search_query = self.request.GET.get("search_poll")
         if search_query:
             object_list = Poll.objects.filter(
@@ -164,7 +172,10 @@ class AvailablePollsView(LoginRequiredMixin, ListView):
     
 class AvailableQuestionsView(LoginRequiredMixin, ListView):
     form_class = CreatePollForm
+    paginate_by = 4
+    model = Question
     template_name = 'users/available_questions.html'
+
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
@@ -178,7 +189,7 @@ class AvailableQuestionsView(LoginRequiredMixin, ListView):
         else:
             object_list = Question.objects.all()
         return object_list
-
+    
 class VotersView(LoginRequiredMixin, ListView):
     login_url = "users:login"
     redirect_field_name = "redirect_to"
