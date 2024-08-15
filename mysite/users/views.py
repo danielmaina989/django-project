@@ -6,6 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from polls.models import Choice, Question, Vote, Poll
 from django.views import generic
 from django.views.generic import FormView ,CreateView, ListView
+from django.views.generic.edit import DeleteView
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.contrib.auth import login, logout
@@ -99,11 +100,12 @@ class EditPollView(UpdateView):
     template_name = "users/edit_poll_name.html" 
     success_url = reverse_lazy('users:available_polls')
 
-    
+class PollDeleteView(DeleteView):
+    model =Poll
+    template_name = "users/delete_poll_name.html" 
+    success_url = reverse_lazy("users:available_polls")
 
-    
-
-    
+   
 class CreateQuizView(LoginRequiredMixin,CreateView):
     form_class = CreatePollQuizForm
     template_name = 'users/create_poll_quiz.html'
@@ -119,7 +121,18 @@ class CreateQuizView(LoginRequiredMixin,CreateView):
                                     kwargs={'question_id': self.object.id})
         return success_url
     
-       
+class EditQuizView(UpdateView):
+    model = Question
+    fields = ["question_text"]
+    template_name = "users/edit_questions.html" 
+    success_url = reverse_lazy('users:available_questions')
+
+class QuizDeleteView(DeleteView):
+    model = Question
+    template_name = "users/delete_question.html" 
+    success_url = reverse_lazy("users:available_questions")
+
+
 class CreateChoicesView(LoginRequiredMixin,CreateView):
     form_class = CreatePollChoicesForm
     template_name = 'users/create_poll_choice.html'

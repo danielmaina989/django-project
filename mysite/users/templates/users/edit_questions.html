@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% load widget_tweaks %}
 
-{% block title %}Create Poll{% endblock %}
+{% block title %}Create Quiz{% endblock %}
 
 {% block content %}
 <div class="card border-info mb-3 mt-4" style="width: 25rem;">
     <div class="card-body justify-content-end">
-        <div class="card-header bg-transparent border-info mb-3">Edit the Poll <span style='font-size:20px;'>&#128071;</span></div>
+        <div class="card-header bg-transparent border-info mb-3">Edit the Question <span style='font-size:20px;'>&#128071;</span></div>
       <form method="post">
         {% csrf_token %}
         {{ form.as_p}}
